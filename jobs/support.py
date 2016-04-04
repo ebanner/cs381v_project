@@ -1,3 +1,6 @@
+# Handy collection of generators that can be used in python files for
+# generating experiment job files.
+
 import numpy as np
 
 
