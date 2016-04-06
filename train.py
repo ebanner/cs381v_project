@@ -12,116 +12,160 @@ import keras
 
 from keras.utils.layer_utils import model_summary
 
-from support import ValidationCallback
+#from support import ValidationCallback
+
+from img_info import ImageInfo
+from img_loader import ImageLoader
+
+from keras.models import Sequential
+from keras.layers.core import Flatten, Dense, Dropout
+from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
+from keras.optimizers import SGD
 
 
 class Model:
     """Master class to share variables between components of the process of
        training a keras model"""
+#
+#    img_data = None
+#
+#    def load_images(self, images_loc):
+#        """Load images from disk
+#        
+#        Ideally load in a pickled dict that contains the images, as well as
+#        additional information about the images (e.g. total number of images, semantic
+#        label names, etc.).
+#            
+#        """
+#        self.img_data = pickle.load(open('pickle/images_info.p', 'rb'))
+#
+#    def do_train_val_split(self):
+#        """Split data up into separate train and validation sets
+#
+#        Use sklearn's function.
+#
+#        """
+#        # TODO: move to img_loader
+#        fold = KFold(len(self.images),
+#                     n_folds=5,
+#                     shuffle=True,
+#                     random_state=0) # for reproducibility!
+#        p = iter(fold)
+#        train_idxs, val_idxs = next(p)
+#        self.num_train, self.num_val = len(train_idxs), len(val_idxs)
+#
+#        # Extract training and validation split
+#        self.train_data = # ...
+#        self.val_data = # ...
+#
+#    def load_weights(self, exp_group, exp_id, use_pretrained):
+#        """Load weights from disk
+#
+#        Parameters
+#        ----------
+#        exp_group : name of experiment group
+#        exp_id : experiment id
+#        use_pretrained : use pretrained weights if true and don't otherwise
+#
+#        Load weights file saved from the last epoch, if it exists.
+#
+#        Returns names of validation weights and f1 weights. Validation weights
+#        are the weights the weights which correspond to the lowest validation loss,
+#        while f1 weights correspond to weights with the best f1 score.
+#
+#        """
+#        val_weights = 'weights/{}/{}-val.h5'.format(exp_group, exp_id)
+#        if os.path.isfile(val_weights):
+#            self.model.load_weights(val_weights)
+#        else:
+#            print >> sys.stderr, 'weights file {} not found!'.format(val_weights)
+#
+#        f1_weights = 'weights/{}/{}-f1.h5'.format(exp_group, exp_id)
+#
+#        return val_weights, f1_weights
+#
+    def VGG_16(self, weights_path=None):
+        model = Sequential()
+        model.add(ZeroPadding2D((1,1),input_shape=(3,80,80)))
+        model.add(Convolution2D(333, 3, 3, activation='relu'))
+        model.add(Convolution2D(3, 3, 3, activation='relu'))
+        model.add(MaxPooling2D((2,2)))
+    
+        #model.add(ZeroPadding2D((1,1)))
+        #model.add(Convolution2D(128, 3, 3, activation='relu'))
+        #model.add(ZeroPadding2D((1,1)))
+        #model.add(Convolution2D(128, 3, 3, activation='relu'))
+        #model.add(MaxPooling2D((2,2), strides=(2,2)))
+    
+        #model.add(ZeroPadding2D((1,1)))
+        #model.add(Convolution2D(256, 3, 3, activation='relu'))
+        #model.add(ZeroPadding2D((1,1)))
+        #model.add(Convolution2D(256, 3, 3, activation='relu'))
+        #model.add(ZeroPadding2D((1,1)))
+        #model.add(Convolution2D(256, 3, 3, activation='relu'))
+        #model.add(MaxPooling2D((2,2), strides=(2,2)))
+    
+        #model.add(ZeroPadding2D((1,1)))
+        #model.add(Convolution2D(512, 3, 3, activation='relu'))
+        #model.add(ZeroPadding2D((1,1)))
+        #model.add(Convolution2D(512, 3, 3, activation='relu'))
+        #model.add(ZeroPadding2D((1,1)))
+        #model.add(Convolution2D(512, 3, 3, activation='relu'))
+        #model.add(MaxPooling2D((2,2), strides=(2,2)))
+    
+        #model.add(ZeroPadding2D((1,1)))
+        #model.add(Convolution2D(512, 3, 3, activation='relu'))
+        #model.add(ZeroPadding2D((1,1)))
+        #model.add(Convolution2D(512, 3, 3, activation='relu'))
+        #model.add(ZeroPadding2D((1,1)))
+        #model.add(Convolution2D(512, 3, 3, activation='relu'))
+        #model.add(MaxPooling2D((2,2), strides=(2,2)))
+    
+        model.add(Flatten())
+        model.add(Dense(500, activation='relu'))
+        model.add(Dropout(0.5))
+        model.add(Dense(3, activation='softmax'))
+    
+        if weights_path:
+            model.load_weights(weights_path)
+    
+        return model
 
-    def load_images(self, images_loc):
-        """Load images from disk
-        
-	Ideally load in a pickled dict that contains the images, as well as
-        additional information about the images (e.g. total number of images, semantic
-        label names, etc.).
-            
-        """
-        images_info_dict = pickle.load(open('pickle/images_info.p', 'rb'))
-
-	# Extract info from images...
-
-    def load_labels(self, soft=False):
-        """Load image labels
-
-	Parameters
-	----------
-	soft : load soft labels if true and one-hot labels otherwise
-
-        """
-	self.labels_names = pickle.load(open('pickle/LABELS_FILE_HERE'))
-
-	# More here...
-
-    def do_train_val_split(self):
-        """Split data up into separate train and validation sets
-
-        Use sklearn's function.
-
-        """
-        fold = KFold(len(self.images),
-                     n_folds=5,
-                     shuffle=True,
-                     random_state=0) # for reproducibility!
-        p = iter(fold)
-        train_idxs, val_idxs = next(p)
-        self.num_train, self.num_val = len(train_idxs), len(val_idxs)
-
-        # Extract training and validation split
-        self.train_data = # ...
-        self.val_data = # ...
-
-    def load_weights(self, exp_group, exp_id, use_pretrained):
-        """Load weights from disk
-
-	Parameters
-	----------
-	exp_group : name of experiment group
-	exp_id : experiment id
-	use_pretrained : use pretrained weights if true and don't otherwise
-
-        Load weights file saved from the last epoch, if it exists.
-
-	Returns names of validation weights and f1 weights. Validation weights
-        are the weights the weights which correspond to the lowest validation loss,
-        while f1 weights correspond to weights with the best f1 score.
-
-        """
-        val_weights = 'weights/{}/{}-val.h5'.format(exp_group, exp_id)
-        if os.path.isfile(val_weights):
-            self.model.load_weights(val_weights)
-        else:
-            print >> sys.stderr, 'weights file {} not found!'.format(val_weights)
-
-        f1_weights = 'weights/{}/{}-f1.h5'.format(exp_group, exp_id)
-
-	return val_weights, f1_weights
-
-    def build_model(self, reg, filter_lens, exp_desc):
+    def build_model(self):
         """Build keras model
 
         Start with declaring model names and have graph construction mirror it
         as closely as possible.
 
         """
-	model = # Build VGG net here...
+        model = self.VGG_16()
 
-        print exp_desc # necessary for visualization code!
+        #print exp_desc # necessary for visualization code!
         model_summary(model)
 
         self.model = model
-
-    def train(self, nb_epoch, batch_size, val_every, val_weights, f1_weights):
-        """Train the model for a fixed number of epochs
-
-	Parameters
-	----------
-	nb_epoch : the number of epochs to train for
-	batch_size : minibatch size
-	val_every : number of times per epoch to compute print validation loss and accuracy
-	val_weights : name of weights file which correspond to best validtion loss	
-	f1_weights : name of weights file which correspond to f1 score
-
-        Set up callbacks first!
-
-        """
-        val_callback = ValidationCallback(self.val_data, batch_size,
-                                          self.num_train, val_every, val_weights, f1_weights)
-
-        history = self.model.fit(self.train_data, batch_size=batch_size,
-                                 nb_epoch=nb_epoch, verbose=2, callbacks=[val_callback])
-
-
+#
+#    def train(self, nb_epoch, batch_size, val_every, val_weights, f1_weights):
+#        """Train the model for a fixed number of epochs
+#
+#        Parameters
+#        ----------
+#        nb_epoch : the number of epochs to train for
+#        batch_size : minibatch size
+#        val_every : number of times per epoch to compute print validation loss and accuracy
+#        val_weights : name of weights file which correspond to best validtion loss      
+#        f1_weights : name of weights file which correspond to f1 score
+#
+#        Set up callbacks first!
+#
+#        """
+#        val_callback = ValidationCallback(self.val_data, batch_size,
+#                                          self.num_train, val_every, val_weights, f1_weights)
+#
+#        history = self.model.fit(self.train_data, batch_size=batch_size,
+#                                 nb_epoch=nb_epoch, verbose=2, callbacks=[val_callback])
+#
+#
 @plac.annotations(
         exp_group=('the name of the experiment group for loading weights', 'option', None, str),
         exp_id=('id of the experiment - usually an integer', 'option', None, str),
@@ -134,7 +178,7 @@ class Model:
         soft=('true if using soft labels and false otherwise', 'option', None, str),
 )
 def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
-        reg=0., batch_size=128, val_every=1, use_pretrained='True'):
+        reg=0., batch_size=128, val_every=1, use_pretrained='True', soft='False'):
     """Training process
 
     1. Load embeddings and labels
@@ -145,24 +189,44 @@ def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
 
     """
     # Build string to identify experiment (used in visualization code)
-    args = sys.argv[1:]
-    pnames, pvalues = [pname.lstrip('-') for pname in args[::2]], args[1::2]
-    exp_desc = '+'.join('='.join(arg_pair) for arg_pair in zip(pnames, pvalues))
+    #args = sys.argv[1:]
+    #pnames, pvalues = [pname.lstrip('-') for pname in args[::2]], args[1::2]
+    #exp_desc = '+'.join('='.join(arg_pair) for arg_pair in zip(pnames, pvalues))
 
-    # Example: parse list parameters into lists!
-    filter_lens = [int(filter_len) for filter_len in filter_lens.split(',')]
+    ## Example: parse list parameters into lists!
+    #filter_lens = [int(filter_len) for filter_len in filter_lens.split(',')]
 
-    # Example: convert boolean strings to actual booleans
-    use_pretrained = True if use_pretrained == 'True' else False
+    ## Example: convert boolean strings to actual booleans
+    #use_pretrained = True if use_pretrained == 'True' else False
 
     # Example pipeline!
+    #m = Model()
+    #m.load_images()
+    #m.load_labels(soft)
+    #m.do_train_val_split()
+    #m.build_model(reg, filter_lens, exp_desc)
+    #val_weights, f1_weights = m.load_weights(exp_group, exp_id, use_pretrained)
+    #m.train(nb_epoch, batch_size, val_every, val_weights, f1_weights)
+
+    img_info = ImageInfo(num_classes=3, explicit_labels=True)
+    img_info.set_image_dimensions((80, 80, 3))
+    img_info.load_image_classnames("../classnames.txt")
+    img_info.load_train_image_paths("../train.txt")
+    img_info.load_test_image_paths("../test.txt")
+    img_loader = ImageLoader(img_info)
+    img_loader.load_all_images()
+
     m = Model()
-    m.load_images()
-    m.load_labels(soft)
-    m.do_train_val_split()
-    m.build_model(reg, filter_lens, exp_desc)
-    val_weights, f1_weights = m.load_weights(exp_group, exp_id, use_pretrained)
-    m.train(nb_epoch, batch_size, val_every, val_weights, f1_weights)
+    m.build_model()
+
+#    history = self.model.fit(self.train_data, batch_size=batch_size,
+#                             nb_epoch=nb_epoch, verbose=2, callbacks=[val_callback])
+    sgd = SGD(lr=0.001, decay=0.1, momentum=0.9, nesterov=True)
+    m.model.compile(loss='categorical_crossentropy', optimizer=sgd)
+    m.model.fit(img_loader.train_data, img_loader.train_labels,
+                validation_data=(img_loader.test_data, img_loader.test_labels),
+                batch_size=64, nb_epoch=5,
+                shuffle=True, show_accuracy=True, verbose=1)
 
 
 if __name__ == '__main__':
