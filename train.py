@@ -84,9 +84,9 @@ class Model:
 #
 #        return val_weights, f1_weights
 #
-    def VGG_16(self, weights_path=None):
+    def VGG_16(self, img_channels, img_w, img_h, num_classes):
         model = Sequential()
-        model.add(ZeroPadding2D((1,1),input_shape=(3,80,80)))
+        model.add(ZeroPadding2D((1,1),input_shape=(img_channels, img_h, img_w)))
         model.add(Convolution2D(333, 3, 3, activation='relu'))
         model.add(Convolution2D(3, 3, 3, activation='relu'))
         model.add(MaxPooling2D((2,2)))
@@ -126,24 +126,24 @@ class Model:
         model.add(Dropout(0.5))
         model.add(Dense(3, activation='softmax'))
     
-        if weights_path:
-            model.load_weights(weights_path)
-    
         return model
 
-    def build_model(self):
+    def build_model(self, img_channels, img_w, img_h, num_classes):
         """Build keras model
 
         Start with declaring model names and have graph construction mirror it
         as closely as possible.
 
         """
-        model = self.VGG_16()
+        model = self.VGG_16(img_channels, img_w, img_h, num_classes)
 
         #print exp_desc # necessary for visualization code!
         model_summary(model)
 
         self.model = model
+    
+        sgd = SGD(lr=0.001, decay=0.1, momentum=0.9, nesterov=True)
+        self.model.compile(loss='categorical_crossentropy', optimizer=sgd)
 #
 #    def train(self, nb_epoch, batch_size, val_every, val_weights, f1_weights):
 #        """Train the model for a fixed number of epochs
@@ -208,6 +208,7 @@ def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
     #val_weights, f1_weights = m.load_weights(exp_group, exp_id, use_pretrained)
     #m.train(nb_epoch, batch_size, val_every, val_weights, f1_weights)
 
+    # TODO: unpickle instead
     img_info = ImageInfo(num_classes=3, explicit_labels=True)
     img_info.set_image_dimensions((80, 80, 3))
     img_info.load_image_classnames("../classnames.txt")
@@ -215,14 +216,17 @@ def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
     img_info.load_test_image_paths("../test.txt")
     img_loader = ImageLoader(img_info)
     img_loader.load_all_images()
+    
+    # TODO: assign soft labels programatically
+    #img_loader = unpickle(...)
+    #img_loader.assign_soft_labels() <- #classes x #classes affinity matrix (nparray)
 
     m = Model()
-    m.build_model()
+    m.build_model(img_info.num_channels, img_info.img_width, img_info.img_height,
+                  img_info.num_classes)
 
 #    history = self.model.fit(self.train_data, batch_size=batch_size,
 #                             nb_epoch=nb_epoch, verbose=2, callbacks=[val_callback])
-    sgd = SGD(lr=0.001, decay=0.1, momentum=0.9, nesterov=True)
-    m.model.compile(loss='categorical_crossentropy', optimizer=sgd)
     m.model.fit(img_loader.train_data, img_loader.train_labels,
                 validation_data=(img_loader.test_data, img_loader.test_labels),
                 batch_size=64, nb_epoch=5,
