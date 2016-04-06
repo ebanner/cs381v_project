@@ -1,0 +1,12 @@
+To compile on command line:
+
+  $ pdflatex report.tex
+
+If you added new citations with \cite{...} that you haven't used before, then:
+
+  $ pdflatex report.tex
+  $ bibtex report
+  $ pdflatex report.tex
+  $ pdflatex report.tex
+
+Yes, it takes multiple times to get it.

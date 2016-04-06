@@ -1,5 +1,7 @@
-./*
+/*
 !*/
 !*.tex
 !*.bib
 !.gitignore
+!README
+!README.md
