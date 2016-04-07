@@ -118,16 +118,29 @@ class ImageLoader(object):
         labels[image_index] = label_id
         image_index += 1
 
-  def subtract_image_means(self):
+  def subtract_image_means(self, per_pixel=False):
     """Subtracts the mean image from each entry both data sets.
 
     The mean image is computed as the average pixel values (between 0 and 1)
     independently for the train and test sets. Load images before calling this.
+
+    Args:
+      per_pixel: set to True if the subtracted average should be on a per-pixel
+          basis. Otherwise, it will be done for each channel of the image.
     """
-    if len(self.train_data) > 0:
-      self.train_data = self.train_data - np.average(self.train_data, axis=0)
-    if len(self.test_data) > 0:
-      self.test_data = self.test_data - np.average(self.test_data, axis=0)
+    if per_pixel:
+      # Subtract the average value from each pixel position.
+      if len(self.train_data) > 0:
+        self.train_data = self.train_data - np.average(self.train_data, axis=0)
+      if len(self.test_data) > 0:
+        self.test_data = self.test_data - np.average(self.test_data, axis=0)
+    else:
+      for data in [self.train_data, self.test_data]:
+        if len(data) > 0:
+          # Subtract the average pixel value from each channel.
+          for i in range(self.image_info.num_channels):
+            channel_avg = np.average(data[:, i, :, :])
+            data[:, i, :, :] = data[:, i, :, :] - channel_avg
 
   def assign_soft_labels(self, affinity_matrix):
     """Assigns soft labels, replacing the 1-hot labels for all images.
