@@ -14,6 +14,7 @@ from keras.utils.layer_utils import model_summary
 
 #from support import ValidationCallback
 
+from elapsed_timer import ElapsedTimer
 from img_info import ImageInfo
 from img_loader import ImageLoader
 
@@ -124,7 +125,7 @@ class Model:
         model.add(Flatten())
         model.add(Dense(500, activation='relu'))
         model.add(Dropout(0.5))
-        model.add(Dense(3, activation='softmax'))
+        model.add(Dense(num_classes, activation='softmax'))
     
         return model
 
@@ -209,28 +210,37 @@ def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
     #m.train(nb_epoch, batch_size, val_every, val_weights, f1_weights)
 
     # Load pickled image loader (pickled in img_loader.py '__main__'):
-    img_loader = pickle.load(open('pickle_jar/img_data.p', 'rb'))
+    print 'Loading pickled data...'
+    timer = ElapsedTimer()
+    img_loader = pickle.load(open('pickle_jar/imnet_test_gray.p', 'rb'))
     img_info = img_loader.image_info
+    print 'Loaded in {}.'.format(timer.get_elapsed_time())
     
-    # An example of loading in soft labels in code:
-    print img_loader.test_labels
-    soft_labels = np.empty((3, 3), dtype='float32')
-    soft_labels[0, :] = np.asarray([0.8, 0.1, 0.1])
-    soft_labels[1, :] = np.asarray([0.1, 0.6, 0.3])
-    soft_labels[2, :] = np.asarray([0.1, 0.3, 0.6])
-    img_loader.assign_soft_labels(soft_labels)
-    print img_loader.test_labels
+#    # An example of loading in soft labels in code:
+#    print img_loader.test_labels
+#    soft_labels = np.empty((3, 3), dtype='float32')
+#    soft_labels[0, :] = np.asarray([0.8, 0.1, 0.1])
+#    soft_labels[1, :] = np.asarray([0.1, 0.6, 0.3])
+#    soft_labels[2, :] = np.asarray([0.1, 0.3, 0.6])
+#    img_loader.assign_soft_labels(soft_labels)
+#    print img_loader.test_labels
 
     m = Model()
+    print 'Building model...'
+    timer.reset()
     m.build_model(img_info.num_channels, img_info.img_width, img_info.img_height,
                   img_info.num_classes)
+    print 'Model built in {}.'.format(timer.get_elapsed_time())
 
 #    history = self.model.fit(self.train_data, batch_size=batch_size,
 #                             nb_epoch=nb_epoch, verbose=2, callbacks=[val_callback])
+    print 'Training model...'
+    timer.reset()
     m.model.fit(img_loader.train_data, img_loader.train_labels,
                 validation_data=(img_loader.test_data, img_loader.test_labels),
-                batch_size=64, nb_epoch=5,
+                batch_size=16, nb_epoch=5,
                 shuffle=True, show_accuracy=True, verbose=1)
+    print 'Finished in {}.'.format(timer.get_elapsed_time())
 
 
 if __name__ == '__main__':
