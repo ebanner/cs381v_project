@@ -101,12 +101,19 @@ class ImageLoader(object):
         if self.image_info.num_channels != 3:
           img = img.convert('L')
         img_arr = np.asarray(img, dtype='float32')
-        # TODO: if image is gray but channels is 3, replicate gray channle to RGB.
         # TODO: subtract mean from the image in the set.
         if self.image_info.num_channels == 3:
-          data[image_index, 0, :, :] = img_arr[:, :, 0]
-          data[image_index, 1, :, :] = img_arr[:, :, 1]
-          data[image_index, 2, :, :] = img_arr[:, :, 2]
+          # If the raw image is grayscale but the classification is on RGB data,
+          # replicate the grayscale intensities across the three channels.
+          if img_arr.ndim == 2:
+            data[image_index, 0, :, :] = img_arr
+            data[image_index, 1, :, :] = img_arr
+            data[image_index, 2, :, :] = img_arr
+          # Otherwise, extract each channel and add it to the data array.
+          else:
+            data[image_index, 0, :, :] = img_arr[:, :, 0]
+            data[image_index, 1, :, :] = img_arr[:, :, 1]
+            data[image_index, 2, :, :] = img_arr[:, :, 2]
         else:
           data[image_index, 0, :, :] = img_arr
         labels[image_index] = label_id
