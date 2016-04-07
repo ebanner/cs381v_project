@@ -212,9 +212,12 @@ def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
     # Load pickled image loader (pickled in img_loader.py '__main__'):
     print 'Loading pickled data...'
     timer = ElapsedTimer()
-    img_loader = pickle.load(open('pickle_jar/imnet_test_gray.p', 'rb'))
+    img_loader = pickle.load(open('pickle_jar/imnet_test_rgb.p', 'rb'))
     img_info = img_loader.image_info
     print 'Loaded in {}.'.format(timer.get_elapsed_time())
+
+    # Subtract the mean from all images.
+    img_loader.subtract_image_means()
     
 #    # An example of loading in soft labels in code:
 #    print img_loader.test_labels

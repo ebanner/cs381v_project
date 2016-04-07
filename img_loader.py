@@ -101,7 +101,6 @@ class ImageLoader(object):
         if self.image_info.num_channels != 3:
           img = img.convert('L')
         img_arr = np.asarray(img, dtype='float32')
-        # TODO: subtract mean from the image in the set.
         if self.image_info.num_channels == 3:
           # If the raw image is grayscale but the classification is on RGB data,
           # replicate the grayscale intensities across the three channels.
@@ -118,6 +117,17 @@ class ImageLoader(object):
           data[image_index, 0, :, :] = img_arr
         labels[image_index] = label_id
         image_index += 1
+
+  def subtract_image_means(self):
+    """Subtracts the mean image from each entry both data sets.
+
+    The mean image is computed as the average pixel values (between 0 and 1)
+    independently for the train and test sets. Load images before calling this.
+    """
+    if len(self.train_data) > 0:
+      self.train_data = self.train_data - np.average(self.train_data, axis=0)
+    if len(self.test_data) > 0:
+      self.test_data = self.test_data - np.average(self.test_data, axis=0)
 
   def assign_soft_labels(self, affinity_matrix):
     """Assigns soft labels, replacing the 1-hot labels for all images.
