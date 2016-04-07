@@ -208,16 +208,9 @@ def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
     #val_weights, f1_weights = m.load_weights(exp_group, exp_id, use_pretrained)
     #m.train(nb_epoch, batch_size, val_every, val_weights, f1_weights)
 
-    # TODO: unpickle instead
-    img_info = ImageInfo(num_classes=3)
-    img_info.set_image_dimensions((80, 80, 3))
-    img_info.load_image_classnames("../classnames.txt")
-    img_info.load_train_image_paths("../train.txt")
-    img_info.load_test_image_paths("../test.txt")
-    img_loader = ImageLoader(img_info)
-    img_loader.load_all_images()
-
-    #img_loader = unpickle(...)
+    # Load pickled image loader (pickled in img_loader.py '__main__'):
+    img_loader = pickle.load(open('pickle_jar/img_data.p', 'rb'))
+    img_info = img_loader.image_info
     
     # An example of loading in soft labels in code:
     print img_loader.test_labels

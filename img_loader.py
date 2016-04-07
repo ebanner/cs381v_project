@@ -1,8 +1,10 @@
 # Provides a loader that reads and stores the training and test data in memory
 # to be fed into a neural network.
 
+from img_info import ImageInfo
 from keras.utils import np_utils
 import numpy as np
+import pickle
 from PIL import Image
 from sklearn.preprocessing import normalize
 
@@ -19,18 +21,18 @@ class ImageLoader(object):
           used for training and testing.
     """
     # Data size information:
-    self._image_info = image_info
-    num_classes = self._image_info.num_classes
-    img_w = self._image_info.img_width
-    img_h = self._image_info.img_height
-    num_channels = self._image_info.num_channels
+    self.image_info = image_info
+    num_classes = self.image_info.num_classes
+    img_w = self.image_info.img_width
+    img_h = self.image_info.img_height
+    num_channels = self.image_info.num_channels
     # Initialize the empty train data arrays:
-    num_train_imgs = self._image_info.num_train_images
+    num_train_imgs = self.image_info.num_train_images
     self.train_data = np.empty((num_train_imgs, num_channels, img_w, img_h),
                                dtype='float32')
     self.train_labels = np.empty((num_train_imgs,), dtype='uint8')
     # Initialize the empty test data arrays:
-    num_test_imgs = self._image_info.num_test_images
+    num_test_imgs = self.image_info.num_test_images
     self.test_data = np.empty((num_test_imgs, num_channels, img_w, img_h),
                               dtype='float32')
     self.test_labels = np.empty((num_test_imgs,), dtype='uint8')
@@ -48,24 +50,24 @@ class ImageLoader(object):
   def _load_train_images(self):
     """Loads all training images into memory and normalizes the data."""
     self._load_images(
-        self._image_info.train_img_files,
-        self._image_info.num_classes,
+        self.image_info.train_img_files,
+        self.image_info.num_classes,
         self.train_data, self.train_labels, 'train')
     self.train_data = self.train_data.astype('float32') / 255
     self.train_labels = self._format_labels(self.train_labels,
-                                            self._image_info.train_img_files,
-                                            self._image_info.num_classes)
+                                            self.image_info.train_img_files,
+                                            self.image_info.num_classes)
 
   def load_test_images(self):
     """Loads all test images into memory and normalizes the data."""
     self._load_images(
-        self._image_info.test_img_files,
-        self._image_info.num_classes,
+        self.image_info.test_img_files,
+        self.image_info.num_classes,
         self.test_data, self.test_labels, 'test')
     self.test_data = self.test_data.astype('float32') / 255
     self.test_labels = self._format_labels(self.test_labels,
-                                           self._image_info.test_img_files,
-                                           self._image_info.num_classes)
+                                           self.image_info.test_img_files,
+                                           self.image_info.num_classes)
 
   def _load_images(self, file_names, num_classes, data, labels, disp):
     """Loads the images from the given file names to the given arrays.
@@ -87,17 +89,17 @@ class ImageLoader(object):
     image_index = 0
     for label_id in range(num_classes):
       print 'Loading {} images for class "{}" ({})...'.format(
-          disp, self._image_info.classnames[label_id], label_id)
+          disp, self.image_info.classnames[label_id], label_id)
       for imdata in file_names[label_id]:
         impath = imdata[0]
         img = Image.open(impath)
-        img = img.resize((self._image_info.img_width,
-                          self._image_info.img_height))
-        if self._image_info.num_channels != 3:
+        img = img.resize((self.image_info.img_width,
+                          self.image_info.img_height))
+        if self.image_info.num_channels != 3:
           img = img.convert('L')
         img_arr = np.asarray(img, dtype='float32')
         # TODO: if image is gray but channels is 3, replicate gray channle to RGB.
-        if self._image_info.num_channels == 3:
+        if self.image_info.num_channels == 3:
           data[image_index, 0, :, :] = img_arr[:, :, 0]
           data[image_index, 1, :, :] = img_arr[:, :, 1]
           data[image_index, 2, :, :] = img_arr[:, :, 2]
@@ -117,8 +119,8 @@ class ImageLoader(object):
           in this data. It is assumed that each row in this matrix has been
           normalized.
     """
-    num_train_imgs = self._image_info.num_train_images
-    num_test_imgs = self._image_info.num_test_images
+    num_train_imgs = self.image_info.num_train_images
+    num_test_imgs = self.image_info.num_test_images
     for label_set, num_images in [(self.train_labels, num_train_imgs),
                                   (self.test_labels, num_test_imgs)]:
       for i in range(num_images):
@@ -142,7 +144,7 @@ class ImageLoader(object):
       of weights for each class. If ImageInfo.explicit_labels is set to False,
       then this label vector will be a 1-hot vector.
     """
-    if self._image_info.explicit_labels:
+    if self.image_info.explicit_labels:
       label_matrix = np.empty((len(labels), num_classes), dtype='float32')
       image_index = 0
       for label_id in range(num_classes):
@@ -155,3 +157,18 @@ class ImageLoader(object):
       return label_matrix
     else:
       return np_utils.to_categorical(labels, num_classes)
+
+
+# If this file is called, build the data and pickle it.
+if __name__ == '__main__':
+  # TODO: pass params for these variables.
+  img_info = ImageInfo(num_classes=3)
+  img_info.set_image_dimensions((80, 80, 3))
+  img_info.load_image_classnames("data_files/test/classnames.txt")
+  img_info.load_train_image_paths("data_files/test/train_1hot.txt")
+  img_info.load_test_image_paths("data_files/test/test_1hot.txt")
+  img_loader = ImageLoader(img_info)
+  img_loader.load_all_images()
+  # Save with pickle.
+  pickle.dump(img_loader, open('pickle_jar/img_data.p', 'wb'))
+  print 'Pickling complete.'
