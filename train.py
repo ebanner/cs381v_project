@@ -209,17 +209,24 @@ def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
     #m.train(nb_epoch, batch_size, val_every, val_weights, f1_weights)
 
     # TODO: unpickle instead
-    img_info = ImageInfo(num_classes=3, explicit_labels=True)
+    img_info = ImageInfo(num_classes=3)
     img_info.set_image_dimensions((80, 80, 3))
     img_info.load_image_classnames("../classnames.txt")
     img_info.load_train_image_paths("../train.txt")
     img_info.load_test_image_paths("../test.txt")
     img_loader = ImageLoader(img_info)
     img_loader.load_all_images()
-    
-    # TODO: assign soft labels programatically
+
     #img_loader = unpickle(...)
-    #img_loader.assign_soft_labels() <- #classes x #classes affinity matrix (nparray)
+    
+    # An example of loading in soft labels in code:
+    print img_loader.test_labels
+    soft_labels = np.empty((3, 3), dtype='float32')
+    soft_labels[0, :] = np.asarray([0.8, 0.1, 0.1])
+    soft_labels[1, :] = np.asarray([0.1, 0.6, 0.3])
+    soft_labels[2, :] = np.asarray([0.1, 0.3, 0.6])
+    img_loader.assign_soft_labels(soft_labels)
+    print img_loader.test_labels
 
     m = Model()
     m.build_model(img_info.num_channels, img_info.img_width, img_info.img_height,
