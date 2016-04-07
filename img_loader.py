@@ -1,6 +1,7 @@
 # Provides a loader that reads and stores the training and test data in memory
 # to be fed into a neural network.
 
+import argparse
 from img_info import ImageInfo
 from keras.utils import np_utils
 import numpy as np
@@ -11,6 +12,8 @@ from sklearn.preprocessing import normalize
 
 class ImageLoader(object):
   """Loads image data from provided image paths."""
+
+  # TODO: add option to generate a train/validation split on the training data.
 
   def __init__(self, image_info):
     """Reads in all of the images as defined in the given ImageInfo object.
@@ -99,6 +102,7 @@ class ImageLoader(object):
           img = img.convert('L')
         img_arr = np.asarray(img, dtype='float32')
         # TODO: if image is gray but channels is 3, replicate gray channle to RGB.
+        # TODO: subtract mean from the image in the set.
         if self.image_info.num_channels == 3:
           data[image_index, 0, :, :] = img_arr[:, :, 0]
           data[image_index, 1, :, :] = img_arr[:, :, 1]
@@ -159,16 +163,42 @@ class ImageLoader(object):
       return np_utils.to_categorical(labels, num_classes)
 
 
-# If this file is called, build the data and pickle it.
+# If this file is run, loads and preprocesses the image data, and exports it to
+# a picked Python object. This object can then be loaded later instead of having
+# to re-process the image data.
 if __name__ == '__main__':
-  # TODO: pass params for these variables.
-  img_info = ImageInfo(num_classes=3)
-  img_info.set_image_dimensions((80, 80, 3))
-  img_info.load_image_classnames("data_files/test/classnames.txt")
-  img_info.load_train_image_paths("data_files/test/train_1hot.txt")
-  img_info.load_test_image_paths("data_files/test/test_1hot.txt")
+  parser = argparse.ArgumentParser(
+      description=('Saves the image data and info to the given ' +
+                   'Python pickle file.'))
+  parser.add_argument('pickle_file',
+                      help='The file where the pickled data will be saved.')
+  parser.add_argument('-num-classes', dest='num_classes', required=True,
+                      type=int,
+                      help='The number of classes for your data.')
+  parser.add_argument('-img-width', dest='img_width', required=True, type=int,
+                      help='The width your images will be resized to.')
+  parser.add_argument('-img-height', dest='img_height', required=True, type=int,
+                      help='The height your images will be resized to.')
+  parser.add_argument('-img-channels', dest='img_channels', required=True,
+                      type=int,
+                      help=('The number of image channels ' +
+                            '(1 = grayscale, 3 = RGB).'))
+  parser.add_argument('-classnames-file', dest='classnames_file', required=True,
+                      help='The location of the file containing classnames.')
+  parser.add_argument('-train-file', dest='train_file', required=True,
+                      help='The location of the file training data information.')
+  parser.add_argument('-test-file', dest='test_file', required=True,
+                      help='The location of the file test data information.')
+  args = parser.parse_args()
+  img_info = ImageInfo(num_classes=args.num_classes)
+  img_info.set_image_dimensions(
+      (args.img_width, args.img_height, args.img_channels))
+  img_info.load_image_classnames(args.classnames_file)
+  img_info.load_train_image_paths(args.train_file)
+  img_info.load_test_image_paths(args.test_file)
   img_loader = ImageLoader(img_info)
   img_loader.load_all_images()
   # Save with pickle.
-  pickle.dump(img_loader, open('pickle_jar/img_data.p', 'wb'))
-  print 'Pickling complete.'
+  print 'Making a delicious pickle...'
+  pickle.dump(img_loader, open(args.pickle_file, 'wb'))
+  print 'Data saved to pickle file "{}".'.format(args.pickle_file)
