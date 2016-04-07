@@ -1,19 +1,45 @@
-\documentclass{article}
-\usepackage{blindtext}
-\usepackage[utf8]{inputenc}
-\usepackage[left=2cm, right=2cm, top=2cm, bottom=3cm]{geometry}
+\documentclass[10pt,twocolumn,letterpaper]{article}
 
+%\usepackage{cvpr}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
 \usepackage{amssymb}
+%\documentclass{article}
+%\usepackage{blindtext}
+%\usepackage[utf8]{inputenc}
+%\usepackage[left=2cm, right=2cm, top=2cm, bottom=3cm]{geometry}
 \usepackage{enumitem}
 
+\usepackage[breaklinks=true,bookmarks=false]{hyperref}
+%\cvprfinalcopy % *** Comment this line for review version
+
+%\def\cvprPaperID{****} % *** Enter the CVPR Paper ID here
+%\setcounter{page}{4321}
+\def\httilde{\mbox{\tt\raisebox{-.5ex}{\symbol{126}}}}
+
+
 \title{Enriching Learning Signals for Image Classification with Linguistic Information}
-\author{Edward Banner and Richard Teammco}
+
+\author{
+  Edward Banner\\
+  The University of Texas at Austin\\
+  {\tt\small e-banner@cs.utexas.edu}
+\and
+  Richard Teammco\\
+  The University of Texas at Austin\\
+  {\tt\small teammco@cs.utexas.edu}
+}
+
 \date{\today}
+
 
 \begin{document}
 
 \maketitle
 
+\input{sections/abstract.tex}
 \input{sections/intro.tex}
 \input{sections/related_works.tex}
 \input{sections/methods.tex}
