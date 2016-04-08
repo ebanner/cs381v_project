@@ -1,9 +1,12 @@
-\section{Related Works}
+\section{Related Work}
+
 
 Incorporating semantic information into object classification has been well
-studied.
+studied. Many prior works have explored the relationships between language and
+vision, and have attempted to use these results to improve classification
+performance \cite{izadinia2015segment, frome2013devise}.
 By exploiting the the lingustic semantic relationships between object classes
-in WordNet \cite{miller1995wordnet}, \cite{marszalek2007semantic} and
+in WordNet \cite{miller1995wordnet}, \cite{marszalek2007semantic}, and
 \cite{grauman2011learning} perform hierarchical classification by
 discriminating images at more abstract categories first, and then refining the
 classification by moving down the WordNet tree.
@@ -15,13 +18,41 @@ linguistic semantics in WordNet are correlated. This justifies using language
 as a means of improving visual feature learning in convolutional neural
 networks.
 
+
+The authors of DeViSE \cite{frome2013devise} train a deep neural network to
+learn a mapping between visual embeddings and word embeddings trained with
+Word2Vec \cite{mikolov2013distributed}. In doing so, their model learns the
+semantic relationships between image categories. While their performance does
+not improve over existing state-of-the-art classifiers, they show that their
+errors are more semantically reasonable; that is, on average the misclassified
+categories are more closely related to the ground truth in Word2Vec feature
+space.
+
+
+In \cite{hinton2015distilling}, the authors introduce a method called
+\emph{distillation}. The idea is that the probability distribution of a neural
+network's softmax layer reflects the way the model generalizes different
+classes (e.g. a ``BMW'' is likely to be closer to a ``garbage truck'' than to a
+``carrot'' in the model's learned feature space). A simpler and more
+computationally efficient model can then be trained on the soft labels produced
+by this more advanced model.
+The goal of this method is to provide the end user with a fast and lightweight
+model for doing real-time classification instead of needing to rely on complex
+and often slow deep neural network architectures.
+Unlike the work in this paper, our intent is to leverage linguistic information
+to obtain the soft labels, inherently providing the model more information to
+learn from. This can significantly reduce the amount of required trianing data,
+as shown in the results of \cite{hinton2015distilling}. Insufficient data would
+typically result in severe overfitting when using classic 1-hot labels.
+
+
 \cite{zhao2011large} have proposed an idea that is most closely related to our
 own work.
 They used the lingustic semantics information in WordNet to create soft labels
 on ImageNet categories. In particular, they defined the semantic distance
-between WordNet categories as follows:
+between WordNet categories as
 $$D_{ij} = \frac{\mathrm{intersect(path}(i), \mathrm{path}(j))}{\mathrm{max(length(path}(i)), \mathrm{length(path}(j)))}$$
-$\mathrm{path}(i)$ is the path from the root node to node $i$ and
+where $\mathrm{path}(i)$ is the path from the root node to node $i$ and
 $\mathrm{intersect}(p_1, p_2)$ is the number of nodes that are shared by both
 paths. Given this distance metric, they constructed a semantic relatedness
 matrix $\mathbf{S}_{ij} = \exp(-\kappa(1-D_{ij}))$ where $\kappa$ is a
@@ -29,6 +60,7 @@ parameter that controls the semantic relatedness decay factor.
 They then trained a multi-way classifier on these modified label vectors. They
 were able to achieve higher performance with the soft labels on this large data
 set using a softmax classifier on SIFT visual words.
+
 
 Contrary to the approach of \cite{zhao2011large}, we train an end-to-end
 convolutional neural network which learns the features directly.
@@ -45,5 +77,4 @@ pipeline at all stages of this convolutional hierarchy.
 %different layers of the neural network \cite{?}.
 We also expand on this work by studying several soft labeling schemes in
 addition to WordNet. Specifically, we compare and analyze classification
-results using Word2Vec \cite{mikolov2013distributed} semantics and various
-visual similarity schemes.
+results using Word2Vec semantics and various visual similarity schemes.
