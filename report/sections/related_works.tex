@@ -1,8 +1,49 @@
 \section{Related Works}
 
-Related works goes here.
+Incorporating semantic information into object classification has been well
+studied.
+By exploiting the the lingustic semantic relationships between object classes
+in WordNet \cite{miller1995wordnet}, \cite{marszalek2007semantic} and
+\cite{grauman2011learning} perform hierarchical classification by
+discriminating images at more abstract categories first, and then refining the
+classification by moving down the WordNet tree.
+It has also been shown that exploiting visual similarity between general object
+categories can help a hierarchical classifier learn to discriminate those image
+classes more effectively \cite{li2010building}.
+Moreover, \cite{deselaers2011visual} have shown that visual similarity and
+linguistic semantics in WordNet are correlated. This justifies using language
+as a means of improving visual feature learning in convolutional neural
+networks.
 
-\cite{marszalek2007semantic}
-\cite{li2010building}
-\cite{deselaers2011visual}
-\cite{zhao2011large}
+\cite{zhao2011large} have proposed an idea that is most closely related to our
+own work.
+They used the lingustic semantics information in WordNet to create soft labels
+on ImageNet categories. In particular, they defined the semantic distance
+between WordNet categories as follows:
+$$D_{ij} = \frac{\mathrm{intersect(path}(i), \mathrm{path}(j))}{\mathrm{max(length(path}(i)), \mathrm{length(path}(j)))}$$
+$\mathrm{path}(i)$ is the path from the root node to node $i$ and
+$\mathrm{intersect}(p_1, p_2)$ is the number of nodes that are shared by both
+paths. Given this distance metric, they constructed a semantic relatedness
+matrix $\mathbf{S}_{ij} = \exp(-\kappa(1-D_{ij}))$ where $\kappa$ is a
+parameter that controls the semantic relatedness decay factor.
+They then trained a multi-way classifier on these modified label vectors. They
+were able to achieve higher performance with the soft labels on this large data
+set using a softmax classifier on SIFT visual words.
+
+Contrary to the approach of \cite{zhao2011large}, we train an end-to-end
+convolutional neural network which learns the features directly.
+We believe that this is more effective because the soft labels can influence
+the properties of the convolution filters at all layers of the neural network.
+This takes advantage of the hierarchical nature of CNNs where the initial
+layers tend to handle picking out low-level features and later layers learn to
+discriminate more visually semantic attributes. Soft labels can guide the
+pipeline at all stages of this convolutional hierarchy.
+%We believe that this is more effective because the soft labels can influence
+%the properties of the image filters, thereby modeling the entire pipeline to
+%take advantage of visual similarity factors at various semantic levels of the
+%images. This reflects the hierarchical visual semantics often discovered by the
+%different layers of the neural network \cite{?}.
+We also expand on this work by studying several soft labeling schemes in
+addition to WordNet. Specifically, we compare and analyze classification
+results using Word2Vec \cite{mikolov2013distributed} semantics and various
+visual similarity schemes.
