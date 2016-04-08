@@ -35,3 +35,11 @@ class ElapsedTimer(object):
       unit_index += 1
     elapsed = round(elapsed, 2)
     return '{} {}'.format(elapsed, time_units[unit_index])
+
+  def __str__(self):
+    """Returns a string 'Done in X.' where X is the time elapsed.
+
+    Returns:
+      The string representation of the elapsed time.
+    """
+    return 'Done in {}.'.format(self.get_elapsed_time())
