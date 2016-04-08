@@ -139,9 +139,10 @@ class ImageLoader(object):
 
     Args:
       affinity_matrix: an N by N nparray matrix where N is the number of classes
-          in this data. It is assumed that each row in this matrix has been
-          normalized.
+          in this data.
     """
+    # Normalize in case it was not normalized already.
+    affinity_matrix = normalize(affinity_matrix, axis=1)
     num_train_imgs = self.image_info.num_train_images
     num_test_imgs = self.image_info.num_test_images
     for label_set, num_images in [(self.train_labels, num_train_imgs),
