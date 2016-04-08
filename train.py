@@ -181,13 +181,6 @@ class Model:
 def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
         reg=0., batch_size=128, val_every=1, use_pretrained='True', soft='False'):
     """Training process
-
-    1. Load embeddings and labels
-    2. Build the keras model and load weights files
-    3. Do train/val split
-    4. Load weights (if they exist)
-    5. Train!
-
     """
     # Build string to identify experiment (used in visualization code)
     #args = sys.argv[1:]
@@ -200,14 +193,6 @@ def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
     ## Example: convert boolean strings to actual booleans
     #use_pretrained = True if use_pretrained == 'True' else False
 
-    # Example pipeline!
-    #m = Model()
-    #m.load_images()
-    #m.load_labels(soft)
-    #m.do_train_val_split()
-    #m.build_model(reg, filter_lens, exp_desc)
-    #val_weights, f1_weights = m.load_weights(exp_group, exp_id, use_pretrained)
-    #m.train(nb_epoch, batch_size, val_every, val_weights, f1_weights)
 
     # Load pickled image loader (pickled in img_loader.py '__main__'):
     print 'Loading pickled data...'
@@ -216,9 +201,6 @@ def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
     img_info = img_loader.image_info
     print 'Loaded in {}.'.format(timer.get_elapsed_time())
 
-    # Subtract the mean from all images.
-    img_loader.subtract_image_means()
-    
 #    # An example of loading in soft labels in code:
 #    print img_loader.test_labels
 #    soft_labels = np.empty((3, 3), dtype='float32')

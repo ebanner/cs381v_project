@@ -217,6 +217,8 @@ if __name__ == '__main__':
   img_info.load_test_image_paths(args.test_file)
   img_loader = ImageLoader(img_info)
   img_loader.load_all_images()
+  # Subtract the mean from all images.
+  img_loader.subtract_image_means()
   # Save with pickle.
   print 'Making a delicious pickle...'
   pickle.dump(img_loader, open(args.pickle_file, 'wb'))
