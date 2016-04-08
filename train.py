@@ -17,6 +17,7 @@ from keras.utils.layer_utils import model_summary
 from elapsed_timer import ElapsedTimer
 from img_info import ImageInfo
 from img_loader import ImageLoader
+from soft_labels import word2vec_soft_labels, get_soft_labels_from_file
 
 from keras.models import Sequential
 from keras.layers.core import Flatten, Dense, Dropout
@@ -193,39 +194,49 @@ def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
     ## Example: convert boolean strings to actual booleans
     #use_pretrained = True if use_pretrained == 'True' else False
 
+    #history = self.model.fit(self.train_data, batch_size=batch_size,
+    #                         nb_epoch=nb_epoch, verbose=2, callbacks=[val_callback])
+
 
     # Load pickled image loader (pickled in img_loader.py '__main__'):
     print 'Loading pickled data...'
     timer = ElapsedTimer()
     img_loader = pickle.load(open('pickle_jar/imnet_test_rgb.p', 'rb'))
     img_info = img_loader.image_info
-    print 'Loaded in {}.'.format(timer.get_elapsed_time())
+    print timer
 
-#    # An example of loading in soft labels in code:
-#    print img_loader.test_labels
-#    soft_labels = np.empty((3, 3), dtype='float32')
-#    soft_labels[0, :] = np.asarray([0.8, 0.1, 0.1])
-#    soft_labels[1, :] = np.asarray([0.1, 0.6, 0.3])
-#    soft_labels[2, :] = np.asarray([0.1, 0.3, 0.6])
-#    img_loader.assign_soft_labels(soft_labels)
-#    print img_loader.test_labels
+    # Apply soft labels.
+    print 'Loading word2vec labels...'
+    #soft_labels = word2vec_soft_labels(img_info.classnames,
+    #    'word2vec/GoogleNews-vectors-negative300.bin')
+    soft_labels = get_soft_labels_from_file('data_files/word2vec_google_news.txt')
+#    print soft_labels
+#    # print similarity sanity check
+#    classnames = img_info.classnames
+#    classnames = [classname.split()[0] for classname in classnames]
+#    classnames = [classname.split(',')[0] for classname in classnames]
+#    for i, class_order in enumerate(np.argsort(-soft_labels)):
+#        print '{}: {}'.format(classnames[i], ','.join(np.array(classnames)[class_order[1:]]))
+#        print ''
+#    return
+    img_loader.assign_soft_labels(soft_labels)
 
+    # Create the model.
     m = Model()
     print 'Building model...'
     timer.reset()
     m.build_model(img_info.num_channels, img_info.img_width, img_info.img_height,
                   img_info.num_classes)
-    print 'Model built in {}.'.format(timer.get_elapsed_time())
+    print timer
 
-#    history = self.model.fit(self.train_data, batch_size=batch_size,
-#                             nb_epoch=nb_epoch, verbose=2, callbacks=[val_callback])
+    # Train the model.
     print 'Training model...'
     timer.reset()
     m.model.fit(img_loader.train_data, img_loader.train_labels,
                 validation_data=(img_loader.test_data, img_loader.test_labels),
-                batch_size=16, nb_epoch=5,
+                batch_size=16, nb_epoch=50,
                 shuffle=True, show_accuracy=True, verbose=1)
-    print 'Finished in {}.'.format(timer.get_elapsed_time())
+    print timer
 
 
 if __name__ == '__main__':
