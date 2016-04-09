@@ -15,6 +15,7 @@ def word2vec_soft_labels(classnames, model_file):
     The nparray for the affinity matrix of soft labels.
   """
   model = gensim.models.Word2Vec.load_word2vec_format(model_file, binary=True)
+  # Take only the first word from each class name.
   classnames = [classname.split()[0] for classname in classnames]
   classnames = [classname.split(',')[0] for classname in classnames]
   embeddings = np.array([model[classname] for classname in classnames])
