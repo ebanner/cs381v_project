@@ -1,3 +1,43 @@
 \section{Introduction}
 
-Introduction goes here.
+Deep neural networks have been very popular in recent years because of their
+potential to greatly improve results of pretty much any classification task
+that they are applied to.
+Convolutional neural networks (CNNs) have been especially popular in computer
+vision for image classification.
+However, despite their empirical success, training a deep learning model
+generally requires a massive amount of data, often in the order of millions of
+images.
+
+Because of the high computational cost of training and even evaluating new data
+on deep neural networks, \cite{hinton2015distilling} have explored a new method
+for transfering the learned weights of a complicated deep neural network model
+(i.e. a model with a large number of parameters) to a simpler one (with
+significantly fewer parameters). They showed that this can reduce the amount of
+training data needed by the simpler model while still producing comparable
+results, and because it has fewer parameters, it is able to evaluate data
+faster.
+
+We attempt to improve classification results and reduce the amount of required
+training data for a deep CNN by leveraging the semantic relationships between
+object categories embedded in natural language.
+Doing so can help significantly reduce the time it takes to train and test a
+deep model. Using a simpler model can also help reduce strict hardware
+requirements, making it useful on low-end consumer computers or even mobile
+devices.
+Finally, by reducing the amount of required training data, we hope to show that
+our technique can be applied to domains where labeled training examples are
+limited, which may have previously prevented deep learning techniques from being
+used in those settings.
+
+%% This is more related works:
+%There has been a lot of work done in studying the relationship between vision
+%and language, showing that it is possible to integrate linguistic information
+%to improve visual classification tasks \cite{izadinia2015segment,
+%frome2013devise, marszalek2007semantic, grauman2011learning}.
+%Studies have shown that there are correlations between visual and semantic
+%similarities among visual object categories \cite{deselaers2011visual}.
+%Thus, we believe that we can achieve a performance gain and/or reduce the
+%amount of required training images, as was done in \cite{hinton2015distilling},
+%but using linguistic information instead of relying on the learned weights of a
+%stronger deep model.
