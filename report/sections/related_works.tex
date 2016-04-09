@@ -43,7 +43,13 @@ Unlike the work in this paper, our intent is to leverage linguistic information
 to obtain the soft labels, inherently providing the model more information to
 learn from. This can significantly reduce the amount of required trianing data,
 as shown in the results of \cite{hinton2015distilling}. Insufficient data would
-typically result in severe overfitting when using classic 1-hot labels.
+typically result in severe overfitting when using classic 1-hot labels
+\footnote{
+  A 1-hot label means that the correct (ground truth) category is given a value
+  of 1 and all other categories are given a value of 0. When the classifier
+  makes an error, it is not given any ``partial credit'' based on the semantic
+  relevance of its mistake.
+}.
 
 
 \cite{zhao2011large} have proposed an idea that is most closely related to our
