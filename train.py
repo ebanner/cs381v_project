@@ -91,9 +91,8 @@ class Model:
         """
         # Create the model.
         model_maker = ModelMaker()
-        print 'built with model maker'
         self.model = model_maker.build_model(
-            img_channels, img_w, img_h, num_classes, model_name='simple')
+            img_channels, img_w, img_h, num_classes, model_name='vgg16')
 
         #print exp_desc # necessary for visualization code!
         model_summary(self.model)
@@ -133,9 +132,11 @@ class Model:
         val_every=('number of times to compute validation per epoch', 'option', None, int),
         use_pretrained=('true if using pretrained weights', 'option', None, str),
         soft=('true if using soft labels and false otherwise', 'option', None, str),
+        model_name=('name of the model that will be trained', 'option', None, str),
 )
 def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
-        reg=0., batch_size=128, val_every=1, use_pretrained='True', soft='False'):
+        reg=0., batch_size=128, val_every=1, use_pretrained='True',
+        soft='False', model_name='simple'):
     """Training process
     """
     # Build string to identify experiment (used in visualization code)
@@ -157,13 +158,15 @@ def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
     print timer
 
     # Apply soft labels.
-    print 'Loading word2vec labels...'
-    timer.reset()
-    #soft_labels = word2vec_soft_labels(img_info.classnames,
-    #    'word2vec/GoogleNews-vectors-negative300.bin')
-    soft_labels = get_soft_labels_from_file('data_files/word2vec_google_news.txt')
-    print timer
-    img_loader.assign_soft_labels(soft_labels)
+    # TODO: can't this be a boolean?
+    if soft == 'True':
+        print 'Loading word2vec soft labels...'
+        timer.reset()
+        #soft_labels = word2vec_soft_labels(img_info.classnames,
+        #    'word2vec/GoogleNews-vectors-negative300.bin')
+        soft_labels = get_soft_labels_from_file('data_files/word2vec_google_news.txt')
+        print timer
+        img_loader.assign_soft_labels(soft_labels)
 
     # Create the model.
     m = Model()
@@ -172,10 +175,6 @@ def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
     m.build_model(img_info.num_channels, img_info.img_width, img_info.img_height,
                   img_info.num_classes)
     print timer
-
-    # TODO: remove! Use arguments.
-    nb_epoch = 50
-    batch_size = 64
 
     # Train the model.
     print 'Training model...'

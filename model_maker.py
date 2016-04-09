@@ -55,6 +55,7 @@ class ModelMaker(object):
     """
     if model_name not in self.model_names:
       model_name = 'simple'
+    print 'Building "{}" model.'.format(model_name)
     return self.model_names[model_name](img_channels, img_w, img_h, num_classes)
   
   def simple_model(self, img_channels, img_w, img_h, num_classes):
