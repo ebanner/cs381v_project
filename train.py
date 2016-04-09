@@ -17,12 +17,8 @@ from keras.utils.layer_utils import model_summary
 from elapsed_timer import ElapsedTimer
 from img_info import ImageInfo
 from img_loader import ImageLoader
+from model_maker import ModelMaker
 from soft_labels import word2vec_soft_labels, get_soft_labels_from_file
-
-from keras.models import Sequential
-from keras.layers.core import Flatten, Dense, Dropout
-from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
-from keras.optimizers import SGD
 
 
 class Model:
@@ -86,66 +82,24 @@ class Model:
 #
 #        return val_weights, f1_weights
 #
-    def VGG_16(self, img_channels, img_w, img_h, num_classes):
-        model = Sequential()
-        model.add(ZeroPadding2D((1,1),input_shape=(img_channels, img_h, img_w)))
-        model.add(Convolution2D(333, 3, 3, activation='relu'))
-        model.add(Convolution2D(3, 3, 3, activation='relu'))
-        model.add(MaxPooling2D((2,2)))
-    
-        #model.add(ZeroPadding2D((1,1)))
-        #model.add(Convolution2D(128, 3, 3, activation='relu'))
-        #model.add(ZeroPadding2D((1,1)))
-        #model.add(Convolution2D(128, 3, 3, activation='relu'))
-        #model.add(MaxPooling2D((2,2), strides=(2,2)))
-    
-        #model.add(ZeroPadding2D((1,1)))
-        #model.add(Convolution2D(256, 3, 3, activation='relu'))
-        #model.add(ZeroPadding2D((1,1)))
-        #model.add(Convolution2D(256, 3, 3, activation='relu'))
-        #model.add(ZeroPadding2D((1,1)))
-        #model.add(Convolution2D(256, 3, 3, activation='relu'))
-        #model.add(MaxPooling2D((2,2), strides=(2,2)))
-    
-        #model.add(ZeroPadding2D((1,1)))
-        #model.add(Convolution2D(512, 3, 3, activation='relu'))
-        #model.add(ZeroPadding2D((1,1)))
-        #model.add(Convolution2D(512, 3, 3, activation='relu'))
-        #model.add(ZeroPadding2D((1,1)))
-        #model.add(Convolution2D(512, 3, 3, activation='relu'))
-        #model.add(MaxPooling2D((2,2), strides=(2,2)))
-    
-        #model.add(ZeroPadding2D((1,1)))
-        #model.add(Convolution2D(512, 3, 3, activation='relu'))
-        #model.add(ZeroPadding2D((1,1)))
-        #model.add(Convolution2D(512, 3, 3, activation='relu'))
-        #model.add(ZeroPadding2D((1,1)))
-        #model.add(Convolution2D(512, 3, 3, activation='relu'))
-        #model.add(MaxPooling2D((2,2), strides=(2,2)))
-    
-        model.add(Flatten())
-        model.add(Dense(500, activation='relu'))
-        model.add(Dropout(0.5))
-        model.add(Dense(num_classes, activation='softmax'))
-    
-        return model
-
     def build_model(self, img_channels, img_w, img_h, num_classes):
-        """Build keras model
+        """Build Keras model
 
         Start with declaring model names and have graph construction mirror it
         as closely as possible.
 
         """
-        model = self.VGG_16(img_channels, img_w, img_h, num_classes)
+        # Create the model.
+        model_maker = ModelMaker()
+        self.model = model_maker.build_model(
+            img_channels, img_w, img_h, num_classes, model_name='vgg16')
 
         #print exp_desc # necessary for visualization code!
-        model_summary(model)
-
-        self.model = model
+        model_summary(self.model)
     
-        sgd = SGD(lr=0.001, decay=0.1, momentum=0.9, nesterov=True)
-        self.model.compile(loss='categorical_crossentropy', optimizer=sgd)
+        # Compile the model.
+        model_maker.compile_model_sgd(
+            self.model, learning_rate=0.001, decay=0.1, momentum=0.9)
 #
 #    def train(self, nb_epoch, batch_size, val_every, val_weights, f1_weights):
 #        """Train the model for a fixed number of epochs
@@ -178,25 +132,23 @@ class Model:
         val_every=('number of times to compute validation per epoch', 'option', None, int),
         use_pretrained=('true if using pretrained weights', 'option', None, str),
         soft=('true if using soft labels and false otherwise', 'option', None, str),
+        model_name=('name of the model that will be trained', 'option', None, str),
 )
 def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
-        reg=0., batch_size=128, val_every=1, use_pretrained='True', soft='False'):
+        reg=0., batch_size=128, val_every=1, use_pretrained='True',
+        soft='False', model_name='simple'):
     """Training process
     """
     # Build string to identify experiment (used in visualization code)
     #args = sys.argv[1:]
     #pnames, pvalues = [pname.lstrip('-') for pname in args[::2]], args[1::2]
     #exp_desc = '+'.join('='.join(arg_pair) for arg_pair in zip(pnames, pvalues))
-
     ## Example: parse list parameters into lists!
     #filter_lens = [int(filter_len) for filter_len in filter_lens.split(',')]
-
     ## Example: convert boolean strings to actual booleans
     #use_pretrained = True if use_pretrained == 'True' else False
-
     #history = self.model.fit(self.train_data, batch_size=batch_size,
     #                         nb_epoch=nb_epoch, verbose=2, callbacks=[val_callback])
-
 
     # Load pickled image loader (pickled in img_loader.py '__main__'):
     print 'Loading pickled data...'
@@ -206,20 +158,15 @@ def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
     print timer
 
     # Apply soft labels.
-    print 'Loading word2vec labels...'
-    #soft_labels = word2vec_soft_labels(img_info.classnames,
-    #    'word2vec/GoogleNews-vectors-negative300.bin')
-    soft_labels = get_soft_labels_from_file('data_files/word2vec_google_news.txt')
-#    print soft_labels
-#    # print similarity sanity check
-#    classnames = img_info.classnames
-#    classnames = [classname.split()[0] for classname in classnames]
-#    classnames = [classname.split(',')[0] for classname in classnames]
-#    for i, class_order in enumerate(np.argsort(-soft_labels)):
-#        print '{}: {}'.format(classnames[i], ','.join(np.array(classnames)[class_order[1:]]))
-#        print ''
-#    return
-    img_loader.assign_soft_labels(soft_labels)
+    # TODO: can't this be a boolean?
+    if soft == 'True':
+        print 'Loading word2vec soft labels...'
+        timer.reset()
+        #soft_labels = word2vec_soft_labels(img_info.classnames,
+        #    'word2vec/GoogleNews-vectors-negative300.bin')
+        soft_labels = get_soft_labels_from_file('data_files/word2vec_google_news.txt')
+        print timer
+        img_loader.assign_soft_labels(soft_labels)
 
     # Create the model.
     m = Model()
@@ -234,9 +181,12 @@ def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
     timer.reset()
     m.model.fit(img_loader.train_data, img_loader.train_labels,
                 validation_data=(img_loader.test_data, img_loader.test_labels),
-                batch_size=16, nb_epoch=50,
+                batch_size=batch_size, nb_epoch=nb_epoch,
                 shuffle=True, show_accuracy=True, verbose=1)
     print timer
+
+    # TODO: questions!
+    # 1) Why randomize number of epochs when the model is evaluated at each one?
 
 
 if __name__ == '__main__':
