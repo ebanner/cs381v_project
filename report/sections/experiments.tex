@@ -1,3 +1,25 @@
 \section{Experiments}
 
-Experiments go here.
+\begin{table}[!tb]
+  \centering
+  \begin{tabular}{|c|c|c|}
+    \hline
+      & \textbf{1-Hot Labels} & \textbf{Word2Vec Labels} \\
+    \hline
+      \textbf{VGG-16} & 0.2167 & 0.2091 \\
+    \hline
+      \textbf{4-layer CNN} & 0.1091 & 0.1864 \\
+    \hline
+  \end{tabular}
+  \caption{
+    The training results after 50 epochs of using 1-hot labels vs. using soft
+    labels from Word2Vec.
+  }
+  \label{tbl:results}
+\end{table}
+
+
+As a proof of concept, we tested with two models: VGG-16, and a much simpler
+4-layer CNN. There is a clear boost in performance on the simpler model, as
+seen in Table \ref{tbl:results}, allowing it to perform almost as well as
+VGG-16 despite being a significantly weaker architecture.
