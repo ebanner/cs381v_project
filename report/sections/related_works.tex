@@ -57,7 +57,9 @@ own work.
 They used the lingustic semantics information in WordNet to create soft labels
 on ImageNet categories. In particular, they defined the semantic distance
 between WordNet categories as
-$$D_{ij} = \frac{\mathrm{intersect(path}(i), \mathrm{path}(j))}{\mathrm{max(length(path}(i)), \mathrm{length(path}(j)))}$$
+\begin{equation}
+D_{ij} = \frac{\mathrm{intersect(path}(i), \mathrm{path}(j))}{\mathrm{max(length(path}(i)), \mathrm{length(path}(j)))}
+\end{equation}
 where $\mathrm{path}(i)$ is the path from the root node to node $i$ and
 $\mathrm{intersect}(p_1, p_2)$ is the number of nodes that are shared by both
 paths. Given this distance metric, they constructed a semantic relatedness
