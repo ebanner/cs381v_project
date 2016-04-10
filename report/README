@@ -2,7 +2,8 @@ To compile on command line:
 
   $ pdflatex report
 
-If you added new citations with \cite{...} that you haven't used before, then:
+If you added new citations with \cite{...} that you haven't used before, or if
+you're compiling for the first time, then:
 
   $ pdflatex report
   $ bibtex report
