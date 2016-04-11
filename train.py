@@ -82,7 +82,7 @@ class Model:
 #
 #        return val_weights, f1_weights
 #
-    def build_model(self, img_channels, img_w, img_h, num_classes):
+    def build_model(self, img_channels, img_w, img_h, num_classes, model_name):
         """Build Keras model
 
         Start with declaring model names and have graph construction mirror it
@@ -92,7 +92,7 @@ class Model:
         # Create the model.
         model_maker = ModelMaker()
         self.model = model_maker.build_model(
-            img_channels, img_w, img_h, num_classes, model_name='vgg16')
+            img_channels, img_w, img_h, num_classes, model_name)
 
         #print exp_desc # necessary for visualization code!
         model_summary(self.model)
@@ -173,7 +173,7 @@ def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
     print 'Building model...'
     timer.reset()
     m.build_model(img_info.num_channels, img_info.img_width, img_info.img_height,
-                  img_info.num_classes)
+                  img_info.num_classes, model_name)
     print timer
 
     # Train the model.
