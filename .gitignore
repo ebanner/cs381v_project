@@ -2,3 +2,4 @@
 *.swp
 .DS_Store
 word2vec/
+.ipynb_checkpoints/
