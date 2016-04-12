@@ -52,12 +52,14 @@ typically result in severe overfitting when using classic
 }.
 
 
-\cite{zhao2011large} have proposed an idea that is most closely related to our
-own work.
+Zhao et al. \cite{zhao2011large}, following the work of Fergus et al.
+\cite{fergus2010semantic}, have proposed an idea that is most closely related
+to our own work.
 They used the lingustic semantics information in WordNet to create soft labels
 on ImageNet categories. In particular, they defined the semantic distance
 between WordNet categories as
 \begin{equation}
+\label{eq:wordnet_dist}
 D_{ij} = \frac{\mathrm{intersect(path}(i), \mathrm{path}(j))}{\mathrm{max(length(path}(i)), \mathrm{length(path}(j)))}
 \end{equation}
 where $\mathrm{path}(i)$ is the path from the root node to node $i$ and
