@@ -9,9 +9,31 @@ Mainly, we hope to look at different linguistic semantic similarity measures
 and compare them with visual similarity measures.
 
 
+
 \subsection{Linguistic Semantic Similarity}
 
-Linguistic
+
+\subsubsection{WordNet}
+
+WordNet is a large hierarchical database of English words that relates each
+word semantically with all other words \cite{miller1995wordnet}. Word
+relationships might include things like ``is a'' and ``part of'' semantics
+\cite{marszalek2007semantic}.
+
+Using the distance metric in equation \ref{eq:wordnet_dist}, we will follow the
+work of \cite{fergus2010semantic} and \cite{zhao2011large} to define soft
+labels for a deep CNN classifier. We will experimentally test a wide variety of
+hyperparameters and values for $\kappa$.
+%We will compare our relative performance gains to those of \cite{zhao2011large}
+%as well as to the overall performance of pre-trained state-of-the-art models.
+
+
+\subsubsection{Word2Vec}
+
+Word2Vec is ... ? \cite{mikolov2013distributed}.
+
+We will ... ?
+
 
 
 \subsection{Visual Similarity}
