@@ -83,6 +83,14 @@ We will ... ?
 
 \subsection{Visual Similarity}
 
+% TODO: remove (this is a note for Kristen)
+\emph{
+  NOTE: this section is a slight deviation from our main focus, so it is not
+  clear yet whether there will be time and/or a need to do this. We are adding
+  it as a potential idea for expanding our project. It might just end up in the
+  ``future works'' section in the final draft.
+}
+
 The main goal of our work is to exploit information embedded in natural
 language to aid in visual classification.
 However, it has been shown that lingustic semantics do not always work well in
@@ -92,6 +100,35 @@ modeling visual similarity \cite{li2010building}. As an example given in
 To this end, we will explore soft labeling schemes based on visual similarity
 and compare the performance and label distributions to those of the lingustic
 schemes.
+By better understanding the relationship between linguistic similarity and the
+visual representations learned by a CNN, we hope to explore improved ways of
+defining and weighting soft labels.
+We will use several existing methods to compute the similarities between
+different image categories.
 
-One trivial = GIST, then \cite{li2010building}, possibly the trained experts
-or clustering.
+First, we will take the average GIST descriptor \cite{oliva2001modeling} values
+for each category across all images in the training data set. We will use the
+scaled similarity between these descriptors as a distribution across the soft
+labels.
+Since GIST is a global descriptor, we expect it to capture more of the
+background contextual information rather than similarities between the objects
+themselves.
+
+To better represent the categories directly, we can also experiment with
+visual word clusters mined from images of different object categories.
+We expect that clustering SIFT descriptors \cite{lowe1999object} should work
+reasonably well.
+The similarity metric can be defined as the distance between the cluster
+centroids into which the images of different categories fall.
+We can also explore using visual vocabulary trees, introduced by
+\cite{nister2006scalable}.
+
+We can investigate many other methods. The most notable and relevant to our
+work is \cite{li2010building}, who have successfully used their visual
+similarity approach for improving hierarchical image classification.
+We can also explore other works in unsupervised clustering, including most
+recent advancements using deep neural networks in unsupervised visual
+clustering
+(Jianwei Yang, Devi Parikh, and Dhruv Batra, 2016 - not yet published).
+
+% Possibly the trained experts thing?
