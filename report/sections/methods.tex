@@ -1,12 +1,55 @@
 \section{Methods}
 
 We plan to extend the method of \cite{zhao2011large} to deep convolutional
-neural networks. We hope to show that by using soft labels, our model can
-achieve better classification performance. Additionally, we would like to
-show that it can learn using smaller amounts of annotated training data.
-Finally, we plan to compare different schemes for obtaining the soft labels.
-Mainly, we hope to look at different linguistic semantic similarity measures
-and compare them with visual similarity measures.
+neural networks.
+We hope to show that by using soft labels, our model can achieve better
+classification performance.
+Based on the work of \cite{hinton2015distilling}, we will see if we can reduce
+the architectural complexity of our network (thus reducing training and
+evaluation time). We will also see if soft labels can help reduce the required
+number of training examples.
+
+We are going to compare different schemes for obtaining the soft labels for
+ImageNet categories.
+We will look at semantic similarity measures derived from Word2Vec and WordNet
+and compare them against each other as well as to other visual similarity
+metrics.
+
+
+
+\subsection{Soft Labels}
+\label{sec:soft_labels}
+
+\begin{table}[!tb]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+      & Donkey & Mule & Truck & Cat \\
+    \hline
+      ``Donkey'' 1-hot & 1 & 0 & 0 & 0 \\
+    \hline
+      ``Donkey'' soft & 0.8 & 0.15 & 0.0 & 0.05 \\
+    \hline
+  \end{tabular}
+  \caption{
+    A toy example of a 1-hot label compared to a soft label.
+  }
+  \label{tbl:soft_labels}
+\end{table}
+
+Traditionally when training a classifier, the loss function would be computed
+by comparing the prediction values against a 1-hot label vector.
+A 1-hot label means that the correct (ground truth) category is given a value
+of 1 and all other categories are given a value of 0.
+When the classifier makes an error, it is not given any ``partial credit''
+based on the semantic relevance of its mistake.
+
+On the contrary, soft labels provide a real-valued distribution over the
+expected ground truth. Thus, the classifier is not penalized as heavily for
+making a semantically relevant error (e.g. misclassifying a ``donkey'' as a
+``mule'') as it would be for a completely incorrect prediction (e.g.
+misclassifying a ``truck'' as a ``cat'').
+An example is shown in Table \ref{tbl:soft_labels}.
 
 
 
@@ -15,17 +58,19 @@ and compare them with visual similarity measures.
 
 \subsubsection{WordNet}
 
-WordNet is a large hierarchical database of English words that relates each
-word semantically with all other words \cite{miller1995wordnet}. Word
-relationships might include things like ``is a'' and ``part of'' semantics
-\cite{marszalek2007semantic}.
+WordNet is a large database of English words grouped into synonym sets called
+sysnets \cite{miller1995wordnet}.
+The sysnets are related hierarchically with semantic and conceptual links, such
+as hyperonyms (``is a'') and meronyms (``part of'') relationships.
 
 Using the distance metric in equation \ref{eq:wordnet_dist}, we will follow the
 work of \cite{fergus2010semantic} and \cite{zhao2011large} to define soft
 labels for a deep CNN classifier. We will experimentally test a wide variety of
 hyperparameters and values for $\kappa$.
-%We will compare our relative performance gains to those of \cite{zhao2011large}
-%as well as to the overall performance of pre-trained state-of-the-art models.
+Moreover, we will further analyze the performance tradeoffs between hyperonym
+and meronym relations. Using both relationships has been introduced in
+\cite{marszalek2007semantic} for hierarchical classification, but to the best
+of our knowledge has not been used in comparing soft label performance before.
 
 
 \subsubsection{Word2Vec}
@@ -38,4 +83,15 @@ We will ... ?
 
 \subsection{Visual Similarity}
 
-Visual
+The main goal of our work is to exploit information embedded in natural
+language to aid in visual classification.
+However, it has been shown that lingustic semantics do not always work well in
+modeling visual similarity \cite{li2010building}. As an example given in
+\cite{li2010building}, WordNet does not capture the correlation between
+``tower'' and ``business district''.
+To this end, we will explore soft labeling schemes based on visual similarity
+and compare the performance and label distributions to those of the lingustic
+schemes.
+
+One trivial = GIST, then \cite{li2010building}, possibly the trained experts
+or clustering.
