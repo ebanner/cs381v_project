@@ -44,12 +44,15 @@ of 1 and all other categories are given a value of 0.
 When the classifier makes an error, it is not given any ``partial credit''
 based on the semantic relevance of its mistake.
 
-On the contrary, soft labels provide a real-valued distribution over the
-expected ground truth. Thus, the classifier is not penalized as heavily for
-making a semantically relevant error (e.g. misclassifying a ``donkey'' as a
-``mule'') as it would be for a completely incorrect prediction (e.g.
-misclassifying a ``truck'' as a ``cat'').
-An example is shown in Table \ref{tbl:soft_labels}.
+On the contrary, soft labels provide a real-valued distribution over
+the object categories. Thus, the classifier is not penalized as
+heavily for making a semantically relevant error (e.g. misclassifying
+a ``donkey'' as a ``mule'') as it would be for a completely incorrect
+prediction (e.g. misclassifying a ``truck'' as a ``cat''). The use of
+soft labels also encourages assigning a small amount of probability
+mass to semantically-related classes. One could argue that such a
+model has a richer understanding of the image. An example is shown in
+Table \ref{tbl:soft_labels}.
 
 
 
@@ -61,7 +64,7 @@ An example is shown in Table \ref{tbl:soft_labels}.
 WordNet is a large database of English words grouped into synonym sets called
 sysnets \cite{miller1995wordnet}.
 The sysnets are related hierarchically with semantic and conceptual links, such
-as hyperonyms (``is a'') and meronyms (``part of'') relationships.
+as hypernyms (``is a'') and meronyms (``part of'') relationships.
 
 Using the distance metric in equation \ref{eq:wordnet_dist}, we will follow the
 work of \cite{fergus2010semantic} and \cite{zhao2011large} to define soft
@@ -73,13 +76,28 @@ and meronym relations. Using both relationships has been introduced in
 of our knowledge has not been used in comparing soft label performance before.
 
 
-\subsubsection{Word2Vec}
+\subsubsection{Word Embeddings}
 
-Word2Vec is ... ? \cite{mikolov2013distributed}.
+A word embedding maps each word in a lexicon to a continuous
+real-valued vector. This nature of this mapping is often guided by the
+distributional hypothesis introduced in
+\cite{harris1954distributional}, which states that a word can be
+understood by the context it appears in. Assuming this hypothesis, a
+desirable mapping is one that maps words which appear in similar
+contexts to nearby locations in the vector space.
 
-We will ... ?
-
-
+Popular methods for computing word embeddings such as word2vec
+\cite{mikolov2013distributed} and GloVe \cite{pennington2014glove}
+have been shown to capture this desirable property of similarity.
+However, \cite{levy2014dependency} shows that when context is varied,
+the notion of similarity between words also changes. For example, when
+context is taken to be neighboring words, words close in the vector
+space tend to be \emph{topically} similar. Conversely, when context is
+taken to be the output from a dependency parser, nearby words tend to
+be \emph{semantically} similar. We plan to examine the effect word
+context has on semantic label sharing for image classification and
+conjecture that the dependency-based word embeddings will improve
+performance over location-based contexts.
 
 \subsection{Visual Similarity}
 
