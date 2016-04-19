@@ -55,7 +55,7 @@ class ImageLoader(object):
     self._load_images(
         self.image_info.train_img_files,
         self.image_info.num_classes,
-        self.train_data, self.train_labels, 'train')
+        self.train_data, self.train_labels, disp='train')
     self.train_data = self.train_data.astype('float32') / 255
     self.train_labels = self._format_labels(self.train_labels,
                                             self.image_info.train_img_files,
@@ -66,13 +66,14 @@ class ImageLoader(object):
     self._load_images(
         self.image_info.test_img_files,
         self.image_info.num_classes,
-        self.test_data, self.test_labels, 'test')
+        self.test_data, self.test_labels, disp='test')
     self.test_data = self.test_data.astype('float32') / 255
     self.test_labels = self._format_labels(self.test_labels,
                                            self.image_info.test_img_files,
                                            self.image_info.num_classes)
 
-  def _load_images(self, file_names, num_classes, data, labels, disp):
+  def _load_images(self, file_names, num_classes, data, labels,
+                   disp='all', ):
     """Loads the images from the given file names to the given arrays.
     
     No data normalization happens at this step.

@@ -1,3 +1,6 @@
+condor/
+exp*
+condor_job.sh
 *.pyc
 *.swp
 .DS_Store
