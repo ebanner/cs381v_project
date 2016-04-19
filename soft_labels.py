@@ -4,6 +4,16 @@ import gensim
 import numpy as np
 
 
+#    # An example of loading in soft labels in code:
+#    print img_loader.test_labels
+#    soft_labels = np.empty((3, 3), dtype='float32')
+#    soft_labels[0, :] = np.asarray([0.8, 0.1, 0.1])
+#    soft_labels[1, :] = np.asarray([0.1, 0.6, 0.3])
+#    soft_labels[2, :] = np.asarray([0.1, 0.3, 0.6])
+#    img_loader.assign_soft_labels(soft_labels)
+#    print img_loader.test_labels
+
+
 def word2vec_soft_labels(classnames, model_file):
   """Returns a matrix of soft labels from Word2Vec.
 
@@ -45,13 +55,3 @@ def get_soft_labels_from_file(fname):
     row = [float(col) for col in line.split()]
     soft_labels.append(row)
   return np.asarray(soft_labels, dtype='float32')
-
-
-#    # An example of loading in soft labels in code:
-#    print img_loader.test_labels
-#    soft_labels = np.empty((3, 3), dtype='float32')
-#    soft_labels[0, :] = np.asarray([0.8, 0.1, 0.1])
-#    soft_labels[1, :] = np.asarray([0.1, 0.6, 0.3])
-#    soft_labels[2, :] = np.asarray([0.1, 0.3, 0.6])
-#    img_loader.assign_soft_labels(soft_labels)
-#    print img_loader.test_labels

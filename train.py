@@ -18,7 +18,6 @@ from elapsed_timer import ElapsedTimer
 from img_info import ImageInfo
 from img_loader import ImageLoader
 from model_maker import ModelMaker
-from soft_labels import word2vec_soft_labels, get_soft_labels_from_file
 
 
 class Model:
@@ -131,40 +130,31 @@ class Model:
         batch_size=('batch size', 'option', None, int),
         val_every=('number of times to compute validation per epoch', 'option', None, int),
         use_pretrained=('true if using pretrained weights', 'option', None, str),
-        soft=('true if using soft labels and false otherwise', 'option', None, str),
+        data_file=('name of the pickled img_loader containing all image data', 'option', None, str),
+        affinity_matrix=('name of a soft label affinity matrix (picked nparray)', 'option', None, str),
         model_name=('name of the model that will be trained', 'option', None, str),
 )
 def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
         reg=0., batch_size=128, val_every=1, use_pretrained='True',
-        soft='False', model_name='simple'):
+        data_file='', affinity_matrix='', model_name='simple'):
     """Training process
     """
-    # Build string to identify experiment (used in visualization code)
-    #args = sys.argv[1:]
-    #pnames, pvalues = [pname.lstrip('-') for pname in args[::2]], args[1::2]
-    #exp_desc = '+'.join('='.join(arg_pair) for arg_pair in zip(pnames, pvalues))
-    ## Example: parse list parameters into lists!
-    #filter_lens = [int(filter_len) for filter_len in filter_lens.split(',')]
-    ## Example: convert boolean strings to actual booleans
-    #use_pretrained = True if use_pretrained == 'True' else False
-    #history = self.model.fit(self.train_data, batch_size=batch_size,
-    #                         nb_epoch=nb_epoch, verbose=2, callbacks=[val_callback])
 
     # Load pickled image loader (pickled in img_loader.py '__main__'):
+    if not data_file:
+      print 'Please provide a pickled img_loader with the -data-file flag.'
+      exit(0)
     print 'Loading pickled data...'
     timer = ElapsedTimer()
-    img_loader = pickle.load(open('pickle_jar/imnet_test_rgb.p', 'rb'))
+    img_loader = pickle.load(open(data_file, 'rb'))
     img_info = img_loader.image_info
     print timer
 
-    # Apply soft labels.
-    # TODO: can't this be a boolean?
-    if soft == 'True':
-        print 'Loading word2vec soft labels...'
+    # Apply soft labels if an affinity matrix was given.
+    if affinity_matrix:
+        print 'Loading picked affinity matrix for soft labels...'
         timer.reset()
-        #soft_labels = word2vec_soft_labels(img_info.classnames,
-        #    'word2vec/GoogleNews-vectors-negative300.bin')
-        soft_labels = get_soft_labels_from_file('data_files/word2vec_google_news.txt')
+        soft_labels = pickle.load(open(affinity_matrix, 'rb'))
         print timer
         img_loader.assign_soft_labels(soft_labels)
 
@@ -184,9 +174,6 @@ def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
                 batch_size=batch_size, nb_epoch=nb_epoch,
                 shuffle=True, show_accuracy=True, verbose=1)
     print timer
-
-    # TODO: questions!
-    # 1) Why randomize number of epochs when the model is evaluated at each one?
 
 
 if __name__ == '__main__':
