@@ -11,4 +11,6 @@ To compile:
   $ ./compile
 
 To run:
-  $ ./run [arguments]
+  $ ./run [word1 word2 ... wordN]
+
+Just pipe standard output to a file to save the results.
