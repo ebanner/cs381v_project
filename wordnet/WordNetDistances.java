@@ -21,20 +21,26 @@ public class WordNetDistances {
 
   // Available options of metrics.
   private static RelatednessCalculator[] metrics = {
-      new ZhaoEtAl(db),
-      new WuPalmer(db),
-      new Path(db)
-      //new HirstStOnge(db),
-      //new LeacockChodorow(db),
-      //new Lesk(db),
-      //new Resnik(db),
-      //new JiangConrath(db),
-      //new Lin(db)
+      new ZhaoEtAl(db),   // from Zhao et al. paper
+      new Path(db),       // generic path metric
+      new WuPalmer(db),   // common metric, Budanitsky & Hirst review, 2.5.2
+      new HirstStOnge(db),      // ?
+      new Lesk(db),             // ?
+      new LeacockChodorow(db),  // Budanitsky & Hirst review, 2.5.3
+      new Resnik(db),           // Budanitsky & Hirst review, 2.6.1
+      new JiangConrath(db),     // Budanitsky & Hirst review, 2.6.2
+      new Lin(db)               // Budanitsky & Hirst review, 2.6.3
   };
   private static String[] metricNames = {
       "ZHAO_ET_AL",
+      "PATH",
       "WUP",
-      "PATH"
+      "HIRST",
+      "LESK",
+      "LEACOCK_CHODOROW",
+      "RESNIK",
+      "JIANG_CONRATH",
+      "LIN"
   };
 
   private static double compute(String word1, String word2,
@@ -66,6 +72,7 @@ public class WordNetDistances {
         }
         System.out.println();
       }
+      System.out.println();
     }
   }
 
