@@ -12,7 +12,7 @@ import keras
 
 from keras.utils.layer_utils import model_summary
 
-#from support import ValidationCallback
+from support import ValidationCallback
 
 from elapsed_timer import ElapsedTimer
 from img_info import ImageInfo
@@ -125,20 +125,24 @@ class Model:
         exp_group=('the name of the experiment group for loading weights', 'option', None, str),
         exp_id=('id of the experiment - usually an integer', 'option', None, str),
         nb_epoch=('number of epochs', 'option', None, int),
-        filter_lens=('length of filters', 'option', None, str),
-        reg=('l2 regularization constant', 'option', None, float),
         batch_size=('batch size', 'option', None, int),
         val_every=('number of times to compute validation per epoch', 'option', None, int),
-        use_pretrained=('true if using pretrained weights', 'option', None, str),
         data_file=('name of the pickled img_loader containing all image data', 'option', None, str),
         affinity_matrix=('name of a soft label affinity matrix (picked nparray)', 'option', None, str),
         model_name=('name of the model that will be trained', 'option', None, str),
 )
-def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
-        reg=0., batch_size=128, val_every=1, use_pretrained='True',
+def main(exp_group='', exp_id='', nb_epoch=5, batch_size=128, val_every=1,
         data_file='', affinity_matrix='', model_name='simple'):
     """Training process
     """
+
+    # Build string to identify experiment (used in visualization code)
+    args = sys.argv[1:]
+    pnames, pvalues = [pname.lstrip('-') for pname in args[::2]], args[1::2]
+    exp_desc = '+'.join('='.join(arg_pair) for arg_pair in zip(pnames, pvalues))
+
+    # # Example: parse list parameters into lists!
+    # filter_lens = [int(filter_len) for filter_len in filter_lens.split(',')]
 
     # Load pickled image loader (pickled in img_loader.py '__main__'):
     if not data_file:
@@ -169,10 +173,16 @@ def main(exp_group='', exp_id='', nb_epoch=5, filter_lens='1,2',
     # Train the model.
     print 'Training model...'
     timer.reset()
+    vc = ValidationCallback(img_loader.test_data,
+                            img_loader.test_labels,
+                            batch_size,
+                            len(img_loader.train_data),
+                            val_every=5)
+
     m.model.fit(img_loader.train_data, img_loader.train_labels,
-                validation_data=(img_loader.test_data, img_loader.test_labels),
                 batch_size=batch_size, nb_epoch=nb_epoch,
-                shuffle=True, show_accuracy=True, verbose=1)
+                callbacks=[vc],
+                shuffle=True, show_accuracy=True, verbose=2)
     print timer
 
 
