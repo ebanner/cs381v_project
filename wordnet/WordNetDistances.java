@@ -23,24 +23,24 @@ public class WordNetDistances {
   private static RelatednessCalculator[] metrics = {
       new ZhaoEtAl(db),   // from Zhao et al. paper
       new Path(db),       // generic path metric
-      new WuPalmer(db),   // common metric, Budanitsky & Hirst review, 2.5.2
-      new HirstStOnge(db),      // ?
-      new Lesk(db),             // ?
-      new LeacockChodorow(db),  // Budanitsky & Hirst review, 2.5.3
-      new Resnik(db),           // Budanitsky & Hirst review, 2.6.1
-      new JiangConrath(db),     // Budanitsky & Hirst review, 2.6.2
-      new Lin(db)               // Budanitsky & Hirst review, 2.6.3
+      new WuPalmer(db)   // common metric, Budanitsky & Hirst review, 2.5.2
+      //new HirstStOnge(db),      // ?
+      //new Lesk(db),             // ?
+      //new LeacockChodorow(db),  // Budanitsky & Hirst review, 2.5.3
+      //new Resnik(db),           // Budanitsky & Hirst review, 2.6.1
+      //new JiangConrath(db)     // Budanitsky & Hirst review, 2.6.2
+      //new Lin(db)               // Budanitsky & Hirst review, 2.6.3
   };
   private static String[] metricNames = {
       "ZHAO_ET_AL",
       "PATH",
-      "WUP",
-      "HIRST",
-      "LESK",
-      "LEACOCK_CHODOROW",
-      "RESNIK",
-      "JIANG_CONRATH",
-      "LIN"
+      "WUP"
+      //"HIRST",
+      //"LESK",
+      //"LEACOCK_CHODOROW",
+      //"RESNIK",
+      //"JIANG_CONRATH"
+      //"LIN"
   };
 
   private static double compute(String word1, String word2,
