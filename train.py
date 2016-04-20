@@ -23,64 +23,7 @@ from model_maker import ModelMaker
 class Model:
     """Master class to share variables between components of the process of
        training a keras model"""
-#
-#    img_data = None
-#
-#    def load_images(self, images_loc):
-#        """Load images from disk
-#        
-#        Ideally load in a pickled dict that contains the images, as well as
-#        additional information about the images (e.g. total number of images, semantic
-#        label names, etc.).
-#            
-#        """
-#        self.img_data = pickle.load(open('pickle/images_info.p', 'rb'))
-#
-#    def do_train_val_split(self):
-#        """Split data up into separate train and validation sets
-#
-#        Use sklearn's function.
-#
-#        """
-#        # TODO: move to img_loader
-#        fold = KFold(len(self.images),
-#                     n_folds=5,
-#                     shuffle=True,
-#                     random_state=0) # for reproducibility!
-#        p = iter(fold)
-#        train_idxs, val_idxs = next(p)
-#        self.num_train, self.num_val = len(train_idxs), len(val_idxs)
-#
-#        # Extract training and validation split
-#        self.train_data = # ...
-#        self.val_data = # ...
-#
-#    def load_weights(self, exp_group, exp_id, use_pretrained):
-#        """Load weights from disk
-#
-#        Parameters
-#        ----------
-#        exp_group : name of experiment group
-#        exp_id : experiment id
-#        use_pretrained : use pretrained weights if true and don't otherwise
-#
-#        Load weights file saved from the last epoch, if it exists.
-#
-#        Returns names of validation weights and f1 weights. Validation weights
-#        are the weights the weights which correspond to the lowest validation loss,
-#        while f1 weights correspond to weights with the best f1 score.
-#
-#        """
-#        val_weights = 'weights/{}/{}-val.h5'.format(exp_group, exp_id)
-#        if os.path.isfile(val_weights):
-#            self.model.load_weights(val_weights)
-#        else:
-#            print >> sys.stderr, 'weights file {} not found!'.format(val_weights)
-#
-#        f1_weights = 'weights/{}/{}-f1.h5'.format(exp_group, exp_id)
-#
-#        return val_weights, f1_weights
-#
+
     def build_model(self, img_channels, img_w, img_h, num_classes, model_name):
         """Build Keras model
 
@@ -99,28 +42,8 @@ class Model:
         # Compile the model.
         model_maker.compile_model_sgd(
             self.model, learning_rate=0.001, decay=0.1, momentum=0.9)
-#
-#    def train(self, nb_epoch, batch_size, val_every, val_weights, f1_weights):
-#        """Train the model for a fixed number of epochs
-#
-#        Parameters
-#        ----------
-#        nb_epoch : the number of epochs to train for
-#        batch_size : minibatch size
-#        val_every : number of times per epoch to compute print validation loss and accuracy
-#        val_weights : name of weights file which correspond to best validtion loss      
-#        f1_weights : name of weights file which correspond to f1 score
-#
-#        Set up callbacks first!
-#
-#        """
-#        val_callback = ValidationCallback(self.val_data, batch_size,
-#                                          self.num_train, val_every, val_weights, f1_weights)
-#
-#        history = self.model.fit(self.train_data, batch_size=batch_size,
-#                                 nb_epoch=nb_epoch, verbose=2, callbacks=[val_callback])
-#
-#
+
+
 @plac.annotations(
         exp_group=('the name of the experiment group for loading weights', 'option', None, str),
         exp_id=('id of the experiment - usually an integer', 'option', None, str),
@@ -133,8 +56,7 @@ class Model:
 )
 def main(exp_group='', exp_id='', nb_epoch=5, batch_size=128, val_every=1,
         data_file='', affinity_matrix='', model_name='simple'):
-    """Training process
-    """
+    """Training process"""
 
     # Build string to identify experiment (used in visualization code)
     args = sys.argv[1:]
@@ -146,8 +68,12 @@ def main(exp_group='', exp_id='', nb_epoch=5, batch_size=128, val_every=1,
 
     # Load pickled image loader (pickled in img_loader.py '__main__'):
     if not data_file:
-      print 'Please provide a pickled img_loader with the -data-file flag.'
-      exit(0)
+        print 'Please provide a pickled img_loader with the -data-file flag.'
+        exit(0)
+
+    # Hack for now because exp generation script chokes on slashes!
+    data_file = 'pickle_jar/{}'.format(data_file)
+
     print 'Loading pickled data...'
     timer = ElapsedTimer()
     img_loader = pickle.load(open(data_file, 'rb'))
@@ -171,18 +97,32 @@ def main(exp_group='', exp_id='', nb_epoch=5, batch_size=128, val_every=1,
     print timer
 
     # Train the model.
-    print 'Training model...'
-    timer.reset()
+    #
+    # Load weights if we're picking up from an old experiment. Note the presence
+    # of weights in the corresponding weights directory of this group/id
+    # indicates that we want to continue training. You must delete the weights
+    # file by hand to indicate you want to start over!
+    weights_str = 'weights/{}/{}-{}.h5'
+    acc_weights = weights_str.format(exp_group, exp_id, 'acc') # highest accuracy weights
+    val_weights = weights_str.format(exp_group, exp_id, 'val') # most recent weights
+    if os.path.isfile(val_weights):
+        print >> sys.stderr, 'Loading weights from {}!'.format(val_weights)
+        m.model.load_weights(val_weights)
+
+    # Callback to compute accuracy and save weights during training
     vc = ValidationCallback(img_loader.test_data,
                             img_loader.test_labels,
                             batch_size,
                             len(img_loader.train_data),
-                            val_every=5)
+                            val_every=val_every,
+                            val_weights_loc=val_weights,
+                            acc_weights_loc=acc_weights)
 
+    print 'Training model...'
+    timer.reset()
     m.model.fit(img_loader.train_data, img_loader.train_labels,
                 batch_size=batch_size, nb_epoch=nb_epoch,
-                callbacks=[vc],
-                shuffle=True, show_accuracy=True, verbose=2)
+                callbacks=[vc], shuffle=True, verbose=2)
     print timer
 
 

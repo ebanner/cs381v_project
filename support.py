@@ -19,7 +19,8 @@ class ValidationCallback(Callback):
     Currently actions take place after each epoch.
 
     """
-    def __init__(self, X_val, ys_val, batch_size, num_train, val_every):
+    def __init__(self, X_val, ys_val, batch_size, num_train, val_every,
+            val_weights_loc, acc_weights_loc):
         """Callback to compute f1 during training
         
         Parameters
@@ -39,6 +40,9 @@ class ValidationCallback(Callback):
         self.num_batches_since_val = 0
         num_minis_per_epoch = (num_train/batch_size) # number of minibatches per epoch
         self.K = num_minis_per_epoch / val_every # number of batches to go before doing validation
+        self.val_weights_loc = val_weights_loc
+        self.acc_weights_loc = acc_weights_loc
+        self.best_acc = 0 # keep track of the best accuracy
         
     def on_epoch_end(self, epoch, logs={}):
         """Evaluate validation loss and f1
@@ -54,5 +58,11 @@ class ValidationCallback(Callback):
         predictions = self.model.predict(self.X_val)
         acc = np.mean(predictions == self.ys_val.argmax(axis=1))
         print 'acc: {}'.format(acc)
+        if acc > self.best_acc:
+            self.best_acc = acc
+            self.model.save_weights(self.acc_weights_loc, overwrite=True)
+
+        # Always save latest weights so we can pick up training later
+        self.model.save_weights(self.val_weights_loc, overwrite=True)
 
         sys.stdout.flush() # try and flush stdout so condor prints it!
