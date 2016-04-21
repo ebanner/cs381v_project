@@ -92,6 +92,7 @@ class ImageLoader(object):
     """
     image_index = 0
     for label_id in range(num_classes):
+      start_index = image_index
       print 'Loading {} images for class "{}" ({})...'.format(
           disp, self.image_info.classnames[label_id], label_id)
       for imdata in file_names[label_id]:
@@ -118,6 +119,7 @@ class ImageLoader(object):
           data[image_index, 0, :, :] = img_arr
         labels[image_index] = label_id
         image_index += 1
+      print '   {} images loaded.'.format(image_index - start_index)
 
   def subtract_image_means(self):
     """Subtracts the mean image (per channel) from each entry both data sets.
