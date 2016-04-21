@@ -18,6 +18,7 @@ from elapsed_timer import ElapsedTimer
 from img_info import ImageInfo
 from img_loader import ImageLoader
 from model_maker import ModelMaker
+from soft_labels import get_soft_labels_from_file
 
 
 class Model:
@@ -52,10 +53,12 @@ class Model:
         val_every=('number of times to compute validation per epoch', 'option', None, int),
         data_file=('name of the pickled img_loader containing all image data', 'option', None, str),
         affinity_matrix=('name of a soft label affinity matrix (picked nparray)', 'option', None, str),
+        affinity_matrix_text=('name of a soft label affinity matrix (text file)', 'option', None, str),
         model_name=('name of the model that will be trained', 'option', None, str),
 )
 def main(exp_group='', exp_id='', nb_epoch=5, batch_size=128, val_every=1,
-        data_file='', affinity_matrix='', model_name='simple'):
+        data_file='', affinity_matrix='', affinity_matrix_text='',
+        model_name='simple'):
     """Training process"""
 
     # Build string to identify experiment (used in visualization code)
@@ -83,9 +86,11 @@ def main(exp_group='', exp_id='', nb_epoch=5, batch_size=128, val_every=1,
     # Apply soft labels if an affinity matrix was given.
     if affinity_matrix:
         print 'Loading picked affinity matrix for soft labels...'
-        timer.reset()
         soft_labels = pickle.load(open(affinity_matrix, 'rb'))
-        print timer
+        img_loader.assign_soft_labels(soft_labels)
+    elif affinity_matrix_text:
+        print 'Loading affinity matrix for soft labels from text file...'
+        soft_labels = get_soft_labels_from_file(affinity_matrix_text)
         img_loader.assign_soft_labels(soft_labels)
 
     # Create the model.
