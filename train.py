@@ -61,6 +61,19 @@ def main(exp_group='', exp_id='', nb_epoch=5, batch_size=128, val_every=1,
         model_name='simple'):
     """Training process"""
 
+    # Print the parameters for reference.
+    print 'Experiment parameters:'
+    if exp_group and exp_id:
+        print '   exp_group = {}, exp_id = {}'.format(exp_group, exp_id)
+    print '   Data file (image data): {}'.format(data_file)
+    print '   nb_epoch = {}, batch_size = {}, model_name = "{}"'.format(
+        nb_epoch, batch_size, model_name)
+    if affinity_matrix:
+        print '   Using affinity matrix: {}'.format(affinity_matrix)
+    elif affinity_matrix_text:
+        print '   Using affinity matrix: {}'.format(affinity_matrix_text)
+    print '   Validating every {} epochs.'.format(val_every)
+
     # Build string to identify experiment (used in visualization code)
     args = sys.argv[1:]
     pnames, pvalues = [pname.lstrip('-') for pname in args[::2]], args[1::2]
