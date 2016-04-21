@@ -6,3 +6,4 @@ condor_job.sh
 .DS_Store
 word2vec/
 .ipynb_checkpoints/
+weights/

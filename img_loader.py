@@ -92,6 +92,7 @@ class ImageLoader(object):
     """
     image_index = 0
     for label_id in range(num_classes):
+      start_index = image_index
       print 'Loading {} images for class "{}" ({})...'.format(
           disp, self.image_info.classnames[label_id], label_id)
       for imdata in file_names[label_id]:
@@ -118,6 +119,7 @@ class ImageLoader(object):
           data[image_index, 0, :, :] = img_arr
         labels[image_index] = label_id
         image_index += 1
+      print '   {} images loaded.'.format(image_index - start_index)
 
   def subtract_image_means(self):
     """Subtracts the mean image (per channel) from each entry both data sets.
@@ -142,8 +144,6 @@ class ImageLoader(object):
       affinity_matrix: an N by N nparray matrix where N is the number of classes
           in this data.
     """
-    # Normalize in case it was not normalized already.
-    affinity_matrix = normalize(affinity_matrix, axis=1)
     num_train_imgs = self.image_info.num_train_images
     num_test_imgs = self.image_info.num_test_images
     for label_set, num_images in [(self.train_labels, num_train_imgs),
