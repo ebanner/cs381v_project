@@ -56,7 +56,7 @@ class ValidationCallback(Callback):
 
         # accuracy
         predictions = self.model.predict(self.X_val)
-        acc = np.mean(predictions == self.ys_val.argmax(axis=1))
+        acc = np.mean(predictions.argmax(axis=1) == self.ys_val.argmax(axis=1))
         print 'acc: {}'.format(acc)
         if acc > self.best_acc:
             self.best_acc = acc
