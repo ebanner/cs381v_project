@@ -25,8 +25,8 @@ def args_generator(args, num_exps=32, grid_search=False):
     if grid_search:
         keys = [param for param in od]
 
-        for vals in itertools.product(*[value for param, value in od.items()]):
-            yield zip(keys, [str(val) for val in vals])
+        for i, vals in enumerate(itertools.product(*[value for param, value in od.items()])):
+            yield zip(keys + ['-exp-id'], [str(val) for val in vals] + [str(i)])
     else:
         for _ in range(num_exps):
             args_setting = [(pname, str(next(pvalue))) for pname, pvalue in od.items()]
