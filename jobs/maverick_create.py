@@ -65,7 +65,7 @@ def make_exp(exp_group, args, exp_name, grid_search=False):
 
     get_ipython().system(u"rm /tmp/tmp1 /tmp/tmp2 /tmp/tmp3")
     
-def make_exps(exp_group, args, num_exps, grid_search=False):
+def make_exps(exp_group, args, num_exps=32, grid_search=False):
     """Wrapper around make_exp()
     
     Call make_exp() with `num_exps` number of experiments.
