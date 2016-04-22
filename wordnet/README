@@ -1,0 +1,16 @@
+Before you start, download libraries by running
+  $ ./download_libs
+or just run the wget commands in there manually.
+
+Demo from:
+  http://www.programcreek.com/2014/01/calculate-words-similarity-using-wordnet-in-java/
+
+This should work with a standard Java compiler.
+
+To compile:
+  $ ./compile
+
+To run:
+  $ ./run [word1 word2 ... wordN]
+
+Just pipe standard output to a file to save the results.

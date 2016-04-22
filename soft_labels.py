@@ -2,6 +2,40 @@
 
 import gensim
 import numpy as np
+from sklearn.preprocessing import normalize
+
+
+#    # An example of loading in soft labels in code:
+#    print img_loader.test_labels
+#    soft_labels = np.empty((3, 3), dtype='float32')
+#    soft_labels[0, :] = np.asarray([0.8, 0.1, 0.1])
+#    soft_labels[1, :] = np.asarray([0.1, 0.6, 0.3])
+#    soft_labels[2, :] = np.asarray([0.1, 0.3, 0.6])
+#    img_loader.assign_soft_labels(soft_labels)
+#    print img_loader.test_labels
+
+
+def scale_affinity_matrix_zhao(affinity_matrix, decay_factor):
+  """Scales the affinity matrix according to the decay factor.
+
+  This will scale the affinity matrix according to the semantic relatedness
+  computation of Zhao et al. (2011). The affinity matrix will NOT be normalized
+  first to ensure the weights are correctly balanced.
+  
+  The paper hints a decay factor of 5.
+
+  Args:
+    affinity_matrix: (square nparray) the raw affinity matrix computed from the
+        source semantic similarity metric.
+    decay_factor: (float) the decay factor. The higher this number is, the
+        closer the affinity matrix rows will be to a 1-hot vector. A value of
+        0 would assign all values to 1.
+
+  Returns:
+    The scaled affinity matrix.
+  """
+  affinity_matrix = normalize(affinity_matrix, axis=1)
+  return np.exp(-decay_factor * (1 - affinity_matrix))
 
 
 def word2vec_soft_labels(classnames, model_file):
@@ -45,13 +79,3 @@ def get_soft_labels_from_file(fname):
     row = [float(col) for col in line.split()]
     soft_labels.append(row)
   return np.asarray(soft_labels, dtype='float32')
-
-
-#    # An example of loading in soft labels in code:
-#    print img_loader.test_labels
-#    soft_labels = np.empty((3, 3), dtype='float32')
-#    soft_labels[0, :] = np.asarray([0.8, 0.1, 0.1])
-#    soft_labels[1, :] = np.asarray([0.1, 0.6, 0.3])
-#    soft_labels[2, :] = np.asarray([0.1, 0.3, 0.6])
-#    img_loader.assign_soft_labels(soft_labels)
-#    print img_loader.test_labels

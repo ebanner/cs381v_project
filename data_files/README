@@ -1,0 +1,11 @@
+Directories names indicate the number of object categories in that data set.
+
+If there are multiple sets of a certain number of categories, they will be
+named as (e.g.) "10_1", "10_2", ....
+
+Each training and test set file is of the form:
+  "train_N" or "test_N" where N is the number of examples per category.
+  The number of classes in the test file does not need to change.
+
+Each directory also contains affinity matrices for different similarity schemes
+  with the naming convention as "aff_SCHEME" (e.g. "aff_wordnet_wup").

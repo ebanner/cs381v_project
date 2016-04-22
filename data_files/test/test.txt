@@ -1,9 +1,0 @@
-# UT
-/scratch/cluster/teammco/CS381V_VisRec/ExpPres/BestPatches/UT/p801.jpg 0 1 0 0
-/scratch/cluster/teammco/CS381V_VisRec/ExpPres/BestPatches/UT/p802.jpg 0 0.8 0.2 0
-# AM
-/scratch/cluster/teammco/CS381V_VisRec/ExpPres/BestPatches/AM/p801.jpg 1 0 1 0
-/scratch/cluster/teammco/CS381V_VisRec/ExpPres/BestPatches/AM/p802.jpg 1 0.1 0.8 0.1
-# SF
-/scratch/cluster/teammco/CS381V_VisRec/ExpPres/BestPatches/SF/p801.jpg 2 0.2 0.2 0.6
-/scratch/cluster/teammco/CS381V_VisRec/ExpPres/BestPatches/SF/p802.jpg 2 0 0 1

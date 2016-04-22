@@ -1,0 +1,8 @@
+#!/bin/bash
+
+LIB_DIR=lib
+
+mkdir -p $LIB_DIR
+cd $LIB_DIR
+wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/jawjaw/jawjaw-1.0.2.jar
+wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/ws4j/ws4j-1.0.1.jar 
