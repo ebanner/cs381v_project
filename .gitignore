@@ -7,3 +7,4 @@ condor_job.sh
 word2vec/
 .ipynb_checkpoints/
 weights/
+output/
