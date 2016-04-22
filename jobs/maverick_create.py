@@ -70,6 +70,8 @@ def make_exp(exp_group, args, exp_name):
     
     get_ipython().system(u'mkdir -p exps/$exp_group')
     get_ipython().system(u'cp /tmp/tmp3 exps/$exp_group/$exp_name')
+
+    get_ipython().system(u"rm /tmp/tmp1 /tmp/tmp2 /tmp/tmp3")
     
 def make_exps(exp_group, args, num_exps):
     """Wrapper around make_exp()
