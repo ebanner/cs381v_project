@@ -79,9 +79,6 @@ def main(exp_group='', exp_id='', nb_epoch=5, batch_size=128, val_every=1,
     else:
         load_weights = False
 
-    # Hack for now because exp generation script chokes on slashes!
-    data_file = 'pickle_jar/{}'.format(data_file)
-
     # Print the now-processed parameters for reference in a formatted way.
     print 'Experiment parameters:'
     if exp_group and exp_id:
@@ -151,10 +148,9 @@ def main(exp_group='', exp_id='', nb_epoch=5, batch_size=128, val_every=1,
     weights_str = 'weights/{}/{}-{}.h5'
     acc_weights = weights_str.format(exp_group, exp_id, 'acc') # highest accuracy weights
     val_weights = weights_str.format(exp_group, exp_id, 'val') # most recent weights
-    if load_weights:
-        if os.path.isfile(val_weights):
-            print >> sys.stderr, 'Loading weights from {}!'.format(val_weights)
-            m.model.load_weights(val_weights)
+    if load_weights and os.path.isfile(val_weights):
+        print >> sys.stderr, 'Loading weights from {}!'.format(val_weights)
+        m.model.load_weights(val_weights)
 
     # Callback to compute accuracy and save weights during training
     vc = ValidationCallback(img_loader.test_data,

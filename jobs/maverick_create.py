@@ -7,21 +7,7 @@ from IPython import get_ipython
 from support import my_range, item_generator
 
 
-def args_generator(args):
-    """Generates list of tuples corresponding to args hyperparam dict
-    
-    Parameters
-    ----------
-    args : dict of hyperparam values
-    
-    """
-    od = OrderedDict(args)
-    keys = [param for param in od]
-
-    for vals in itertools.product(*[value for param, value in od.items()]):
-        yield zip(keys, [str(val) for val in vals])
-
-def args_generator(args, num_exps=32):
+def args_generator(args, num_exps=32, grid_search=False):
     """Generates list of tuples corresponding to args hyperparam dict
 
     Parameters
@@ -36,12 +22,18 @@ def args_generator(args, num_exps=32):
     """
     od = OrderedDict(args)
 
-    for _ in range(num_exps):
-        args_setting = [(pname, str(next(pvalue))) for pname, pvalue in od.items()]
+    if grid_search:
+        keys = [param for param in od]
 
-        yield args_setting
+        for i, vals in enumerate(itertools.product(*[value for param, value in od.items()])):
+            yield zip(keys + ['-exp-id'], [str(val) for val in vals] + [str(i)])
+    else:
+        for _ in range(num_exps):
+            args_setting = [(pname, str(next(pvalue))) for pname, pvalue in od.items()]
 
-def make_exp(exp_group, args, exp_name):
+            yield args_setting
+
+def make_exp(exp_group, args, exp_name, grid_search=False):
     """Perform setup work for a maverick experiment
     
     Parameters
@@ -73,13 +65,13 @@ def make_exp(exp_group, args, exp_name):
 
     get_ipython().system(u"rm /tmp/tmp1 /tmp/tmp2 /tmp/tmp3")
     
-def make_exps(exp_group, args, num_exps):
+def make_exps(exp_group, args, num_exps=32, grid_search=False):
     """Wrapper around make_exp()
     
     Call make_exp() with `num_exps` number of experiments.
     
     """
-    args_list = list(args_generator(args, num_exps))
+    args_list = list(args_generator(args, num_exps, grid_search))
 
     # Remove exp_group directories!
     get_ipython().system(u'rm -rf exps/$exp_group')
