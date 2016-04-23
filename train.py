@@ -148,13 +148,13 @@ def main(exp_group='', exp_id='', nb_epoch=5, batch_size=128, val_every=1,
     # of weights in the corresponding weights directory of this group/id
     # indicates that we want to continue training. You must delete the weights
     # file by hand to indicate you want to start over!
+    weights_str = 'weights/{}/{}-{}.h5'
+    acc_weights = weights_str.format(exp_group, exp_id, 'acc') # highest accuracy weights
+    val_weights = weights_str.format(exp_group, exp_id, 'val') # most recent weights
     if load_weights:
-      weights_str = 'weights/{}/{}-{}.h5'
-      acc_weights = weights_str.format(exp_group, exp_id, 'acc') # highest accuracy weights
-      val_weights = weights_str.format(exp_group, exp_id, 'val') # most recent weights
-      if os.path.isfile(val_weights):
-          print >> sys.stderr, 'Loading weights from {}!'.format(val_weights)
-          m.model.load_weights(val_weights)
+        if os.path.isfile(val_weights):
+            print >> sys.stderr, 'Loading weights from {}!'.format(val_weights)
+            m.model.load_weights(val_weights)
 
     # Callback to compute accuracy and save weights during training
     vc = ValidationCallback(img_loader.test_data,
