@@ -62,7 +62,7 @@ class Model:
 )
 def main(exp_group='', exp_id='', nb_epoch=5, batch_size=128, val_every=1,
         data_file='', affinity_matrix='', affinity_matrix_text='',
-        soft_label_decay_factor=1, model_name='simple',
+        soft_label_decay_factor=0, model_name='simple',
         save_weights='False', load_weights='False'):
     """Training process"""
 
@@ -126,9 +126,11 @@ def main(exp_group='', exp_id='', nb_epoch=5, batch_size=128, val_every=1,
         print 'Loading affinity matrix for soft labels from text file...'
         soft_labels = get_soft_labels_from_file(affinity_matrix_text)
         print soft_labels
-        soft_labels = scale_affinity_matrix_zhao(soft_labels,
-                                                 soft_label_decay_factor)
-        print soft_labels
+        if soft_label_decay_factor > 0:
+            soft_labels = scale_affinity_matrix_zhao(soft_labels,
+                                                     soft_label_decay_factor)
+            print 'Re-scaled soft labels.'
+            print soft_labels
         img_loader.assign_soft_labels(soft_labels)
 
     # Create the model.
