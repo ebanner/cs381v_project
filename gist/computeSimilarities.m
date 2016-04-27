@@ -1,24 +1,28 @@
-function [ affinity_matrix ] = computeSimilarities(images, classes)
-% Compute similarities
+function [ affinity_matrix ] = computeSimilarities(image_paths)
+% Compute GIST visual similarities.
 %
 % Args:
-%   img_matrix
+%   image_paths: an M by N cell of image paths, where there are M classes
+%       and for each class there are N image paths.
+%
+% Returns:
+%   affinity_matrix: the M by M affinity similarity matrix.
 
-  % Create LMgist function parameters object.
-  param.imageSize = [224 224];
-  param.orientationsPerScale = [8 8 8 8];
-  param.numberBlocks = 4;
-  param.fc_prefilt = 4;
+    % Compute the average GIST descriptor for each class.
+    num_classes = size(image_paths, 1);
+    average_gists = cell(1, num_classes);
+    for i = 1 : num_classes
+        average_gists{i} = averageGist(image_paths(i, :));
+    end
 
-  for i = 1 : num_images
-    img = imread(images{i});
-    gist = LMgist(img, '', param);
-    % TODO: add to GIST sum for the associated class
-  end
-
-  % Take average GIST descriptor for each class.
-
-  % Compute similarity matrix.
-  affinity_matrix = 0;
-
+    % Compute similarity affinity matrix.
+    affinity_matrix = zeros(num_classes, num_classes);
+    for row = 1 : num_classes
+        g1 = average_gists{row};
+        for col = 1 : num_classes
+            g2 = average_gists{col};
+            affinity_matrix(row, col) = 1 - sum((g1-g2).^2);
+        end
+    end
+    
 end
