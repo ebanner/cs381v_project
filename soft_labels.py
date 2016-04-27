@@ -34,7 +34,7 @@ def scale_affinity_matrix_zhao(affinity_matrix, decay_factor):
   Returns:
     The scaled affinity matrix.
   """
-  affinity_matrix = normalize(affinity_matrix, axis=1)
+  #affinity_matrix = normalize(affinity_matrix, axis=1)
   return np.exp(-decay_factor * (1 - affinity_matrix))
 
 
