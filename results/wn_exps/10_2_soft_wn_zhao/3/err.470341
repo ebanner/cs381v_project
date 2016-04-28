@@ -1,0 +1,4 @@
+discarding /home/04002/teammco/anaconda2/bin from PATH
+prepending /home/04002/teammco/anaconda2/envs/py27x/bin to PATH
+Using Theano backend.
+Using gpu device 0: Tesla K40m (CNMeM is enabled with initial size: 90.0% of memory, CuDNN 3007)

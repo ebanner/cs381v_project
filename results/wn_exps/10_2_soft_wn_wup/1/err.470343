@@ -1,0 +1,18 @@
+discarding /home/04002/teammco/anaconda2/bin from PATH
+prepending /home/04002/teammco/anaconda2/envs/py27x/bin to PATH
+Using Theano backend.
+INFO (theano.gof.compilelock): Waiting for existing lock by unknown process (I am process '57295')
+INFO (theano.gof.compilelock): To manually release the lock, delete /home/04002/teammco/.theano/compiledir_Linux-2.6-el6.x86_64-x86_64-with-centos-6.7-Final-x86_64-2.7.11-64/lock_dir
+INFO (theano.gof.compilelock): Waiting for existing lock by process '49439' (I am process '57295')
+INFO (theano.gof.compilelock): To manually release the lock, delete /home/04002/teammco/.theano/compiledir_Linux-2.6-el6.x86_64-x86_64-with-centos-6.7-Final-x86_64-2.7.11-64/lock_dir
+INFO (theano.gof.compilelock): Waiting for existing lock by unknown process (I am process '57295')
+INFO (theano.gof.compilelock): To manually release the lock, delete /home/04002/teammco/.theano/compiledir_Linux-2.6-el6.x86_64-x86_64-with-centos-6.7-Final-x86_64-2.7.11-64/lock_dir
+INFO (theano.gof.compilelock): Waiting for existing lock by process '14344' (I am process '57295')
+INFO (theano.gof.compilelock): To manually release the lock, delete /home/04002/teammco/.theano/compiledir_Linux-2.6-el6.x86_64-x86_64-with-centos-6.7-Final-x86_64-2.7.11-64/lock_dir
+INFO (theano.gof.compilelock): Waiting for existing lock by unknown process (I am process '57295')
+INFO (theano.gof.compilelock): To manually release the lock, delete /home/04002/teammco/.theano/compiledir_Linux-2.6-el6.x86_64-x86_64-with-centos-6.7-Final-x86_64-2.7.11-64/lock_dir
+INFO (theano.gof.compilelock): Waiting for existing lock by process '62553' (I am process '57295')
+INFO (theano.gof.compilelock): To manually release the lock, delete /home/04002/teammco/.theano/compiledir_Linux-2.6-el6.x86_64-x86_64-with-centos-6.7-Final-x86_64-2.7.11-64/lock_dir
+INFO (theano.gof.compilelock): Waiting for existing lock by unknown process (I am process '57295')
+INFO (theano.gof.compilelock): To manually release the lock, delete /home/04002/teammco/.theano/compiledir_Linux-2.6-el6.x86_64-x86_64-with-centos-6.7-Final-x86_64-2.7.11-64/lock_dir
+Using gpu device 0: Tesla K40m (CNMeM is enabled with initial size: 90.0% of memory, CuDNN 3007)

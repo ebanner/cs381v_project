@@ -1,0 +1,323 @@
+Experiment parameters:
+   exp_group = 5_1_soft_wn, exp_id = 0
+   Data file (image data): pickle_jar/5_1-100.p
+   nb_epoch = 50, batch_size = 32, model_name = "vgg16"
+   Using affinity matrix: data_files/5_1/aff_wordnet_zhao
+      soft_label_decay_factor = 1.0
+   Validating every 1 epochs.
+   Weights are NOT being saved.
+   Weights are NOT being loaded.
+Loading pickled data...
+Done in 6.64 seconds.
+Loading affinity matrix for soft labels from text file...
+[[ 1.          0.5         0.14285715  0.42857143  0.42857143]
+ [ 0.5         1.          0.14285715  0.42857143  0.42857143]
+ [ 0.14285715  0.14285715  1.          0.2         0.22222222]
+ [ 0.42857143  0.42857143  0.2         1.          0.69999999]
+ [ 0.42857143  0.42857143  0.22222222  0.69999999  1.        ]]
+Re-scaled soft labels.
+[[ 1.          0.60653067  0.42437285  0.56471813  0.56471813]
+ [ 0.60653067  1.          0.42437285  0.56471813  0.56471813]
+ [ 0.42437285  0.42437285  1.          0.44932896  0.45942581]
+ [ 0.56471813  0.56471813  0.44932896  1.          0.7408182 ]
+ [ 0.56471813  0.56471813  0.45942581  0.7408182   1.        ]]
+Building model...
+Building "vgg16" model.
+--------------------------------------------------------------------------------
+Initial input shape: (None, 3, 224, 224)
+--------------------------------------------------------------------------------
+Layer (name)                  Output Shape                  Param #             
+--------------------------------------------------------------------------------
+ZeroPadding2D (zeropadding2d) (None, 3, 226, 226)           0                   
+Convolution2D (convolution2d) (None, 64, 224, 224)          1792                
+ZeroPadding2D (zeropadding2d) (None, 64, 226, 226)          0                   
+Convolution2D (convolution2d) (None, 64, 224, 224)          36928               
+MaxPooling2D (maxpooling2d)   (None, 64, 112, 112)          0                   
+ZeroPadding2D (zeropadding2d) (None, 64, 114, 114)          0                   
+Convolution2D (convolution2d) (None, 128, 112, 112)         73856               
+ZeroPadding2D (zeropadding2d) (None, 128, 114, 114)         0                   
+Convolution2D (convolution2d) (None, 128, 112, 112)         147584              
+MaxPooling2D (maxpooling2d)   (None, 128, 56, 56)           0                   
+ZeroPadding2D (zeropadding2d) (None, 128, 58, 58)           0                   
+Convolution2D (convolution2d) (None, 256, 56, 56)           295168              
+ZeroPadding2D (zeropadding2d) (None, 256, 58, 58)           0                   
+Convolution2D (convolution2d) (None, 256, 56, 56)           590080              
+ZeroPadding2D (zeropadding2d) (None, 256, 58, 58)           0                   
+Convolution2D (convolution2d) (None, 256, 56, 56)           590080              
+MaxPooling2D (maxpooling2d)   (None, 256, 28, 28)           0                   
+ZeroPadding2D (zeropadding2d) (None, 256, 30, 30)           0                   
+Convolution2D (convolution2d) (None, 512, 28, 28)           1180160             
+ZeroPadding2D (zeropadding2d) (None, 512, 30, 30)           0                   
+Convolution2D (convolution2d) (None, 512, 28, 28)           2359808             
+ZeroPadding2D (zeropadding2d) (None, 512, 30, 30)           0                   
+Convolution2D (convolution2d) (None, 512, 28, 28)           2359808             
+MaxPooling2D (maxpooling2d)   (None, 512, 14, 14)           0                   
+ZeroPadding2D (zeropadding2d) (None, 512, 16, 16)           0                   
+Convolution2D (convolution2d) (None, 512, 14, 14)           2359808             
+ZeroPadding2D (zeropadding2d) (None, 512, 16, 16)           0                   
+Convolution2D (convolution2d) (None, 512, 14, 14)           2359808             
+ZeroPadding2D (zeropadding2d) (None, 512, 16, 16)           0                   
+Convolution2D (convolution2d) (None, 512, 14, 14)           2359808             
+MaxPooling2D (maxpooling2d)   (None, 512, 7, 7)             0                   
+Flatten (flatten)             (None, 25088)                 0                   
+Dense (dense)                 (None, 4096)                  102764544           
+Dropout (dropout)             (None, 4096)                  0                   
+Dense (dense)                 (None, 4096)                  16781312            
+Dropout (dropout)             (None, 4096)                  0                   
+Dense (dense)                 (None, 5)                     20485               
+--------------------------------------------------------------------------------
+Total params: 134281029
+--------------------------------------------------------------------------------
+Done in 26.66 seconds.
+Training model...
+Epoch 1/50
+100/100 [==============================] - 2s
+val loss: 5.0554523468
+acc: 0.19
+44s - loss: 5.0987
+Epoch 2/50
+100/100 [==============================] - 2s
+val loss: 5.05233335495
+acc: 0.3
+44s - loss: 5.0647
+Epoch 3/50
+100/100 [==============================] - 2s
+val loss: 5.05138254166
+acc: 0.27
+45s - loss: 5.0624
+Epoch 4/50
+100/100 [==============================] - 2s
+val loss: 5.05095767975
+acc: 0.25
+45s - loss: 5.0598
+Epoch 5/50
+100/100 [==============================] - 2s
+val loss: 5.05070400238
+acc: 0.25
+45s - loss: 5.0587
+Epoch 6/50
+100/100 [==============================] - 2s
+val loss: 5.05042123795
+acc: 0.25
+45s - loss: 5.0581
+Epoch 7/50
+100/100 [==============================] - 2s
+val loss: 5.05032014847
+acc: 0.25
+45s - loss: 5.0563
+Epoch 8/50
+100/100 [==============================] - 2s
+val loss: 5.05010700226
+acc: 0.25
+45s - loss: 5.0569
+Epoch 9/50
+100/100 [==============================] - 2s
+val loss: 5.04990577698
+acc: 0.25
+45s - loss: 5.0558
+Epoch 10/50
+100/100 [==============================] - 2s
+val loss: 5.04966926575
+acc: 0.25
+45s - loss: 5.0537
+Epoch 11/50
+100/100 [==============================] - 2s
+val loss: 5.04944372177
+acc: 0.25
+45s - loss: 5.0550
+Epoch 12/50
+100/100 [==============================] - 2s
+val loss: 5.04930019379
+acc: 0.25
+45s - loss: 5.0559
+Epoch 13/50
+100/100 [==============================] - 2s
+val loss: 5.04918193817
+acc: 0.26
+45s - loss: 5.0554
+Epoch 14/50
+100/100 [==============================] - 2s
+val loss: 5.04911136627
+acc: 0.25
+45s - loss: 5.0567
+Epoch 15/50
+100/100 [==============================] - 2s
+val loss: 5.0490026474
+acc: 0.26
+45s - loss: 5.0541
+Epoch 16/50
+100/100 [==============================] - 2s
+val loss: 5.04888153076
+acc: 0.25
+45s - loss: 5.0547
+Epoch 17/50
+100/100 [==============================] - 2s
+val loss: 5.04880714417
+acc: 0.26
+45s - loss: 5.0551
+Epoch 18/50
+100/100 [==============================] - 2s
+val loss: 5.04871082306
+acc: 0.25
+45s - loss: 5.0559
+Epoch 19/50
+100/100 [==============================] - 2s
+val loss: 5.04863166809
+acc: 0.25
+45s - loss: 5.0566
+Epoch 20/50
+100/100 [==============================] - 2s
+val loss: 5.0485830307
+acc: 0.25
+45s - loss: 5.0533
+Epoch 21/50
+100/100 [==============================] - 2s
+val loss: 5.04854917526
+acc: 0.26
+45s - loss: 5.0556
+Epoch 22/50
+100/100 [==============================] - 2s
+val loss: 5.04847621918
+acc: 0.26
+45s - loss: 5.0541
+Epoch 23/50
+100/100 [==============================] - 2s
+val loss: 5.04840564728
+acc: 0.27
+45s - loss: 5.0532
+Epoch 24/50
+100/100 [==============================] - 2s
+val loss: 5.04831552505
+acc: 0.26
+45s - loss: 5.0540
+Epoch 25/50
+100/100 [==============================] - 2s
+val loss: 5.0482468605
+acc: 0.26
+45s - loss: 5.0511
+Epoch 26/50
+100/100 [==============================] - 2s
+val loss: 5.04816865921
+acc: 0.28
+45s - loss: 5.0522
+Epoch 27/50
+100/100 [==============================] - 2s
+val loss: 5.04811191559
+acc: 0.29
+45s - loss: 5.0551
+Epoch 28/50
+100/100 [==============================] - 2s
+val loss: 5.04807567596
+acc: 0.29
+45s - loss: 5.0508
+Epoch 29/50
+100/100 [==============================] - 2s
+val loss: 5.04804086685
+acc: 0.29
+45s - loss: 5.0543
+Epoch 30/50
+100/100 [==============================] - 2s
+val loss: 5.04801940918
+acc: 0.29
+45s - loss: 5.0537
+Epoch 31/50
+100/100 [==============================] - 2s
+val loss: 5.04796552658
+acc: 0.29
+45s - loss: 5.0526
+Epoch 32/50
+100/100 [==============================] - 2s
+val loss: 5.04792404175
+acc: 0.28
+45s - loss: 5.0507
+Epoch 33/50
+100/100 [==============================] - 2s
+val loss: 5.0478925705
+acc: 0.28
+45s - loss: 5.0542
+Epoch 34/50
+100/100 [==============================] - 2s
+val loss: 5.0478386879
+acc: 0.28
+45s - loss: 5.0516
+Epoch 35/50
+100/100 [==============================] - 2s
+val loss: 5.04779243469
+acc: 0.28
+45s - loss: 5.0534
+Epoch 36/50
+100/100 [==============================] - 2s
+val loss: 5.04773616791
+acc: 0.28
+45s - loss: 5.0540
+Epoch 37/50
+100/100 [==============================] - 2s
+val loss: 5.04769897461
+acc: 0.28
+45s - loss: 5.0531
+Epoch 38/50
+100/100 [==============================] - 2s
+val loss: 5.04765081406
+acc: 0.28
+45s - loss: 5.0512
+Epoch 39/50
+100/100 [==============================] - 2s
+val loss: 5.04762077332
+acc: 0.29
+45s - loss: 5.0528
+Epoch 40/50
+100/100 [==============================] - 2s
+val loss: 5.04759979248
+acc: 0.3
+45s - loss: 5.0538
+Epoch 41/50
+100/100 [==============================] - 2s
+val loss: 5.04757976532
+acc: 0.31
+45s - loss: 5.0538
+Epoch 42/50
+100/100 [==============================] - 2s
+val loss: 5.04753446579
+acc: 0.3
+45s - loss: 5.0498
+Epoch 43/50
+100/100 [==============================] - 2s
+val loss: 5.04749679565
+acc: 0.3
+45s - loss: 5.0541
+Epoch 44/50
+100/100 [==============================] - 2s
+val loss: 5.04745149612
+acc: 0.31
+45s - loss: 5.0520
+Epoch 45/50
+100/100 [==============================] - 2s
+val loss: 5.04742717743
+acc: 0.31
+45s - loss: 5.0528
+Epoch 46/50
+100/100 [==============================] - 2s
+val loss: 5.04739141464
+acc: 0.31
+45s - loss: 5.0537
+Epoch 47/50
+100/100 [==============================] - 2s
+val loss: 5.04736757278
+acc: 0.31
+45s - loss: 5.0530
+Epoch 48/50
+100/100 [==============================] - 2s
+val loss: 5.04734134674
+acc: 0.31
+45s - loss: 5.0503
+Epoch 49/50
+100/100 [==============================] - 2s
+val loss: 5.04731559753
+acc: 0.31
+45s - loss: 5.0522
+Epoch 50/50
+100/100 [==============================] - 2s
+val loss: 5.04728460312
+acc: 0.31
+45s - loss: 5.0515
+Done in 37.66 minutes.
