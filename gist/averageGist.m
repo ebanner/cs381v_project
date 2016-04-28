@@ -1,5 +1,12 @@
-function [ average_gist ] = averageGist(image_paths)
+function [ average_gist, all_gists ] = averageGist(image_paths)
 %Computes the average GIST descriptor for all of the given images.
+% Args:
+%   image_paths: a 1 x N cell array of image file paths to be loaded.
+%
+% Returns:
+%   average_gist: the average GIST discriptor for this class.
+%   all_gists: an N x 512 matrix, where each row is a GIST descriptor for that
+%       image.
 
     % Create LMgist function parameters object.
     param.imageSize = [224 224];
@@ -8,15 +15,15 @@ function [ average_gist ] = averageGist(image_paths)
     param.fc_prefilt = 4;
   
     num_images = size(image_paths, 2);
-    average_gist = zeros(1, 512);
+    all_gists = zeros(num_images, 512);
 
     for i = 1 : num_images
         img = imread(image_paths{i});
         gist = LMgist(img, '', param);
-        average_gist = average_gist + gist;
+        all_gists(i, :) = gist;
     end
 
-    average_gist = average_gist / num_images;
+    average_gist = mean(all_gists);
 
 end
 

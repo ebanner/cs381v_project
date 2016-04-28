@@ -4,6 +4,7 @@ function [] = saveAffinityMatrix(...
 
     % Read the image paths from the file.
     image_paths = cell(num_classes, num_images_per_class);
+    disp('Reading the data files...');
     i = 1;
     j = 1;
     fid = fopen(train_file_path);
@@ -26,9 +27,11 @@ function [] = saveAffinityMatrix(...
     fclose(fid);
 
     % Get the affinity matrix.
+    disp('Computing affinity matrix...');
     affinity_matrix = computeSimilarities(image_paths);
 
     % Save the affinity matrix.
+    disp('Saving results to file...');
     dlmwrite(affinity_mat_path, affinity_matrix, ' ');
     
 end
