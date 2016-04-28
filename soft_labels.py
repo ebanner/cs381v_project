@@ -79,3 +79,13 @@ def get_soft_labels_from_file(fname):
     row = [float(col) for col in line.split()]
     soft_labels.append(row)
   return np.asarray(soft_labels, dtype='float32')
+
+
+def write_matrix_to_file(fname, matrix):
+  """Writes the given matrix to a text file.
+
+  Args:
+    fname: the name of the text file to write the matrix to.
+    matrix: the nparray matrix that will be written to the file.
+  """
+  np.savetxt(fname, matrix, delimiter=' ', fmt='%10.5f')
