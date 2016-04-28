@@ -45,6 +45,7 @@ class ValidationCallback(Callback):
         self.acc_weights_loc = acc_weights_loc
         self.best_acc = 0 # keep track of the best accuracy
         self.save_weights = save_weights
+        self.batch_size = batch_size
         
     def on_epoch_end(self, epoch, logs={}):
         """Evaluate validation loss and f1
@@ -53,11 +54,11 @@ class ValidationCallback(Callback):
         
         """
         # loss
-        loss = self.model.evaluate(self.X_val, self.ys_val)
+        loss = self.model.evaluate(self.X_val, self.ys_val, self.batch_size)
         print 'val loss:', loss
 
         # accuracy
-        predictions = self.model.predict(self.X_val)
+        predictions = self.model.predict(self.X_val, self.batch_size)
         acc = np.mean(predictions.argmax(axis=1) == self.ys_val.argmax(axis=1))
         print 'acc: {}'.format(acc)
         if self.save_weights and acc > self.best_acc:
