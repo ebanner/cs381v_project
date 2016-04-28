@@ -1,0 +1,3 @@
+To process the GIST similarities for a training set:
+
+  >> saveAffinityMatrix('/path/to/training_data/file', 'output_file', num_classes, num_imgs_per_class);
