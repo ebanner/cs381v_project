@@ -170,6 +170,19 @@ def main(exp_group='', exp_id='', nb_epoch=5, batch_size=128, val_every=1,
                 callbacks=[vc], shuffle=True, verbose=2)
     print timer
 
+    print 'Dumping predicted probabilities...'
+    m.model.load_weights(acc_weights)
+    probs = m.model.predict(img_loader.test_data, batch_size)
+    probs_loc = 'probs/{}/{}.p'.format(exp_group, exp_id)
+    probs_info = {'data_file': data_file,
+                  'affinity_matrix': affinity_matrix,
+                  'affinity_matrix_text': affinity_matrix_text,
+                  'soft_label_decay_factor': soft_label_decay_factor,
+                  'exp_group': exp_group,
+                  'probs': probs}
+    pickle.dump(probs_info, open(probs_loc, 'wb'))
+    print 'Done!'
+
 
 if __name__ == '__main__':
     plac.call(main)
