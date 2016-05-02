@@ -66,6 +66,13 @@ def main(exp_group='', exp_id='', nb_epoch=5, batch_size=128, val_every=1,
         save_weights='False', load_weights='False'):
     """Training process"""
 
+    # Build string to identify experiment (used in visualization code)
+    args = sys.argv[1:]
+    pnames, pvalues = [pname.lstrip('-') for pname in args[::2]], args[1::2]
+    exp_desc = '+'.join('='.join(arg_pair) for arg_pair in zip(pnames, pvalues))
+
+    print exp_desc
+
     # Process parameters.
     if not data_file:
         print 'Please provide a pickled img_loader with the -data-file flag.'
@@ -98,14 +105,6 @@ def main(exp_group='', exp_id='', nb_epoch=5, batch_size=128, val_every=1,
         'are' if save_weights else 'are NOT')
     print '   Weights {} being loaded.'.format(
         'are' if load_weights else 'are NOT')
-
-    # Build string to identify experiment (used in visualization code)
-    args = sys.argv[1:]
-    pnames, pvalues = [pname.lstrip('-') for pname in args[::2]], args[1::2]
-    exp_desc = '+'.join('='.join(arg_pair) for arg_pair in zip(pnames, pvalues))
-
-    # # Example: parse list parameters into lists!
-    # filter_lens = [int(filter_len) for filter_len in filter_lens.split(',')]
 
     # Load pickled image loader (pickled in img_loader.py '__main__'):
     print 'Loading pickled data...'
