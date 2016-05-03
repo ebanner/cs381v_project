@@ -154,6 +154,12 @@ def main(exp_group='', exp_id='', nb_epoch=5, batch_size=128, val_every=1,
         m.model.load_weights(val_weights)
 
     # Callback to compute accuracy and save weights during training
+    probs_info = {'data_file': data_file,
+                  'affinity_matrix': affinity_matrix,
+                  'affinity_matrix_text': affinity_matrix_text,
+                  'soft_label_decay_factor': soft_label_decay_factor,
+                  'exp_group': exp_group,
+                  'probs_loc': 'probs/{}/{}.p'.format(exp_group, exp_id)}
     vc = ValidationCallback(img_loader.test_data,
                             img_loader.test_labels,
                             batch_size,
@@ -161,6 +167,7 @@ def main(exp_group='', exp_id='', nb_epoch=5, batch_size=128, val_every=1,
                             val_every=val_every,
                             val_weights_loc=val_weights,
                             acc_weights_loc=acc_weights,
+                            probs_info=probs_info,
                             save_weights=save_weights)
 
     print 'Training model...'
@@ -169,19 +176,6 @@ def main(exp_group='', exp_id='', nb_epoch=5, batch_size=128, val_every=1,
                 batch_size=batch_size, nb_epoch=nb_epoch,
                 callbacks=[vc], shuffle=True, verbose=2)
     print timer
-
-    print 'Dumping predicted probabilities...'
-    m.model.load_weights(acc_weights)
-    probs = m.model.predict(img_loader.test_data, batch_size)
-    probs_loc = 'probs/{}/{}.p'.format(exp_group, exp_id)
-    probs_info = {'data_file': data_file,
-                  'affinity_matrix': affinity_matrix,
-                  'affinity_matrix_text': affinity_matrix_text,
-                  'soft_label_decay_factor': soft_label_decay_factor,
-                  'exp_group': exp_group,
-                  'probs': probs}
-    pickle.dump(probs_info, open(probs_loc, 'wb'))
-    print 'Done!'
 
 
 if __name__ == '__main__':
