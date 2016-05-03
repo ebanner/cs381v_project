@@ -1,6 +1,8 @@
 import sys
 import operator
 
+import pickle
+
 import matplotlib.pyplot as plt
 
 import numpy as np
@@ -20,7 +22,7 @@ class ValidationCallback(Callback):
 
     """
     def __init__(self, X_val, ys_val, batch_size, num_train, val_every,
-            val_weights_loc, acc_weights_loc, save_weights=True):
+            val_weights_loc, acc_weights_loc, probs_info, save_weights=True):
         """Callback to compute f1 during training
         
         Parameters
@@ -46,6 +48,7 @@ class ValidationCallback(Callback):
         self.best_acc = 0 # keep track of the best accuracy
         self.save_weights = save_weights
         self.batch_size = batch_size
+        self.probs_info = probs_info
         
     def on_epoch_end(self, epoch, logs={}):
         """Evaluate validation loss and f1
@@ -58,12 +61,16 @@ class ValidationCallback(Callback):
         print 'val loss:', loss
 
         # accuracy
-        predictions = self.model.predict(self.X_val, self.batch_size)
-        acc = np.mean(predictions.argmax(axis=1) == self.ys_val.argmax(axis=1))
+        probs = self.model.predict(self.X_val, self.batch_size)
+        acc = np.mean(probs.argmax(axis=1) == self.ys_val.argmax(axis=1))
         print 'acc: {}'.format(acc)
         if self.save_weights and acc > self.best_acc:
             self.best_acc = acc
             self.model.save_weights(self.acc_weights_loc, overwrite=True)
+
+            # Dump probabilities
+            self.probs_info['probs'] = probs
+            pickle.dump(self.probs_info, open(self.probs_info['probs_loc'], 'wb'))
 
         # Always save latest weights so we can pick up training later
         if self.save_weights:
