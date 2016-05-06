@@ -65,17 +65,45 @@
 % compare them with visual similarity measures, and analyze which object
 % categories relate well in both the visual and semantic domain.
 
-We consider two class sets, which were taken from ImageNet. The first class set
-consists of the following five classes: \emph{sax}, \emph{church},
-\emph{obelisk}, \emph{yurt}, \emph{limousine}. We refer to this class set as C5.
-The next class set consists of the following ten classes: \emph{sax},
-\emph{limousine}, \emph{shovel}, \emph{baseball}, \emph{meerkat}, \emph{church},
-\emph{yurt}, \emph{obelisk}, \emph{bluetick}, \emph{mushroom}. We refer to this
-class set as C10 throughout.
+We consider two class sets, each of which were taken from ImageNet. The first
+class set consists of the following five classes:
+\emph{sax},
+\emph{church},
+\emph{obelisk},
+\emph{yurt}, and
+\emph{limousine}.
+We refer to this class set as C5.
+The next class set consists of the following ten classes:
+\emph{sax},
+\emph{limousine},
+\emph{shovel},
+\emph{baseball},
+\emph{meerkat},
+\emph{church},
+\emph{yurt},
+\emph{obelisk},
+\emph{bluetick}, and
+\emph{mushroom}.
+We refer to this class set as C10 throughout.
 
-Figures \ref{fig:5_1-train_100} shows results on the C5 class set. We see that
-the soft-labeling scheme consistently outperform the one-hot labeling scheme and
-the random labeling scheme. 
+\begin{figure}[!tb]
+%\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.5\textwidth]{figs/vgg16arch.png}
+  \caption{
+      VGGNet architecture.
+  }
+  \label{fig:vgg16arch}
+\end{figure}
+
+For each class set, we train a VGGNet with various soft labeling schemes. The
+VGGNet architecture is pictured in Figure \ref{fig:vgg16arch}. The only
+modification to the architecture we made was to vary the number of
+predicted class probabilities based on the class set.
+
+Figures \ref{fig:5_1-train_100} and \ref{fig:5_1-train_1260} shows results on
+the C5 class set. We see that the soft-labeling scheme consistently outperform
+the one-hot labeling scheme and the random labeling scheme. 
 
 \begin{figure}[!tb]
 %\begin{figure}[t]
@@ -119,16 +147,6 @@ the random labeling scheme.
       consistently outperform one-hot labeling and random labeling.
   }
   \label{fig:10_1-train_100}
-\end{figure}
-
-\begin{figure}[!tb]
-%\begin{figure}[t]
-  \centering
-  \includegraphics[width=0.5\textwidth]{figs/vgg16arch.png}
-  \caption{
-      VGGNet architecture.
-  }
-  \label{fig:word2vec_similarities}
 \end{figure}
 
 \begin{figure}[!tb]
