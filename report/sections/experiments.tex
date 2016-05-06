@@ -263,35 +263,48 @@ examples per-class case.
 \end{table}
 
 Table \ref{tbl:semantic_misses} illustrates the quality of mistakes each model
-makes. We use a similar semantic evaluation metric to \cite{zhao2011large}, but
-with the following deviation: for an affinity matrix $A$, a prediction for class
-$i$ when the correct class is $j$ yields a score of $A_{ij}$ for that image. For
-example, if $i = j$, this corresponds to a correct prediction and the model is
-awarded 1 point (because $A_{ii}$ = 1 for all $i$), which is identical to
-standard accuracy. However, if the model makes an incorrect prediction (i.e. $i
-\neq j$), then it is awarded a score of $A_{ij}$. Recall that $A_{ij}$ is the
-affinity for classes $i$ and $j$ and will be high when the two classes are
-similar. Hence the model gets more credit for predicting related classes.
+makes. The \emph{word2vec} and \emph{WordNet} models are models which were
+trained soft-labels derived from word2vec and WordNet, which have already been
+discussed. The One Hot model is trained on one-hot vectors. The
+\emph{Dependency} soft labels were derived in an identical way to the
+\emph{word2vec} model, but used word vectors from \cite{levy2014dependency}.
+For the WordNet+GIST soft labels, we computed the average between WordNet and
+GIST affinity matrices.
+
+WN-ZHAO is based on the affinity matrix calculated with equation
+\ref{eq:wordnet_dist}. WN-PATH is an identical affinity matrix, with the
+exception that the scaling procedure of \cite{zhao2011large} has not been
+applied.
+
+To compute scores, we use a similar semantic evaluation metric to
+\cite{zhao2011large}, but with the following deviation: for an affinity matrix
+$A$, a prediction for class $i$ when the correct class is $j$ yields a score of
+$A_{ij}$ for that image. For example, if $i = j$, this corresponds to a correct
+prediction and the model is awarded 1 point (because $A_{ii}$ = 1 for all $i$),
+which is identical to standard accuracy. However, if the model makes an
+incorrect prediction (i.e. $i \neq j$), then the model is awarded a score of
+$A_{ij}$.  Recall that $A_{ij}$ is the affinity for classes $i$ and $j$ and will
+be high when the two classes are similar. Hence the model gets more credit for
+predicting related classes and less credit when predicting an unrelated class.
 
 We can see that the model trained on one hot labels performs highest on WN-PATH,
-but both word2vec and WordNet perform higher on WN-ZHAO. WN-ZHAO is based on the
-affinity matrix calculated with equation \ref{eq:wordnet_dist}. We believe that
-performance is higher for models trained with WordNet and word2vec soft labels
-on WN-ZHAO because of the diffuse property of the WN-PATH affinity matrix versus
-the sparseness of the WN-ZHAO affinity matrix. Because WN-PATH is more diffuse,
-the one-hot model does not get penalized as harshly for making bad semantic
-mistakes, whereas it is penalized much more harshly with WN-ZHAO.  We
-acknowledge that the WordNet model's score on WN-ZHAO is inflated because it was
-was trained directly on the WN-ZHAO affinity matrix, but we are pleased to see
-that word2vec also outperforms one-hot and requires no such require no such
-disclaimer.
+but both word2vec and WordNet perform higher on WN-ZHAO. We believe that
+performance is higher for WordNet and word2vec on WN-ZHAO because of the diffuse
+property of the WN-PATH affinity matrix. Because WN-PATH is more diffuse, the
+one-hot model does not get penalized as harshly for making bad semantic
+mistakes, whereas it is penalized much more harshly with WN-ZHAO because WN-ZHAO
+is sparser.  We acknowledge that WordNet model's score on WN-ZHAO is likely
+inflated because it was was trained directly on the WN-ZHAO affinity matrix, but
+we are pleased to see that word2vec also outperforms one-hot and requires no
+such require no such disclaimer.
 
 Figure \ref{fig:tsne} shows a t-SNE plot of the predicted softmax probability
 vectors for the C5 class set with word2vec soft labels. We notice that images of
-yurts and obelisks are clustered close together, indicating that in images of
-both, both of them often received high probability values. t-SNE plots are
-usually performed on the final hidden layer of a CNN, but performing t-SNE on
-the softmax probabilities highlights the goal of our approach.
+\emph{yurts} and \emph{obelisks} are clustered close together, indicating that
+these two labels received high probability mass \emph{jointly}. As an aside, we
+would like to point out that t-SNE plots are usually performed on the final
+hidden layer of a CNN and that performing a t-SNE plot on the softmax
+probabilities more accurately reflects the goals of this work.
 
 % \begin{table*}[t]
 %     \centering
