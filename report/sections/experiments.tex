@@ -77,7 +77,7 @@ The next class set consists of the following ten classes:
 \emph{bluetick}, and
 \emph{mushroom}.
 We refer to this class set as C10 throughout.
-The next class set consists of the following ten classes:
+The last set consists of the following ten classes:
 \emph{limousine},
 \emph{fiddler crab},
 \emph{baseball},
@@ -89,21 +89,36 @@ The next class set consists of the following ten classes:
 \emph{measuring cup}, and
 \emph{projectile}.
 
+The categories for the C5 and C10 data sets were hand-selected to contain
+semantically-related labels. Specifically, in C5
+\emph{church}, \emph{obelisk}, and \emph{yurt}
+have stronger semantic relationships to each other than to the two other
+classes.
+Similarly, in C10,
+\emph{meerkat} and \emph{bluetick} are similar (both are animals).
+\emph{Limousine}, \emph{sax}, and \emph{shovel} are all artificially created
+instruments for various applications.
+Categories \emph{church}, \emph{obelisk}, and \emph{yurt} are also present in
+this set.
+The last set deliberately contains classes which are less semantically similar
+to each other.
+
+
 \begin{figure*}[t]
 %\begin{figure}[t]
   \centering
   \includegraphics[width=1.0\textwidth]{figs/vgg16arch.png}
   \caption{
       VGGNet architecture. Image credit
-      http://blog.christianperone.com/tag/keras/.
+      \url{http://blog.christianperone.com/tag/keras/}.
   }
   \label{fig:vgg16arch}
 \end{figure*}
 
 For each class set, we train a VGGNet with various soft labeling schemes. The
 VGGNet architecture is pictured in Figure \ref{fig:vgg16arch}. The only
-modification to the architecture we made was to vary the number of
-predicted class probabilities based on the class set.
+modification to the architecture we made was to vary the number of predicted
+class probabilities based on the class set.
 
 Figures \ref{fig:5_1-train_100} and \ref{fig:5_1-train_1260} shows results on
 the C5 class set. We see that the soft-labeling scheme consistently outperform
