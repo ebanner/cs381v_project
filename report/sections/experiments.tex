@@ -63,8 +63,7 @@ class set consists of the following five classes:
 \emph{church},
 \emph{obelisk},
 \emph{yurt}, and
-\emph{limousine}.
-We refer to this class set as C5.
+\emph{limousine}, which we refer to as C5.
 The next class set consists of the following ten classes:
 \emph{sax},
 \emph{limousine},
@@ -75,9 +74,8 @@ The next class set consists of the following ten classes:
 \emph{yurt},
 \emph{obelisk},
 \emph{bluetick}, and
-\emph{mushroom}.
-We refer to this class set as C10 throughout.
-The last set consists of the following ten classes:
+\emph{mushroom}, which we refer to as C10.
+The final class set consists of the following ten classes:
 \emph{limousine},
 \emph{fiddler crab},
 \emph{baseball},
@@ -87,22 +85,17 @@ The last set consists of the following ten classes:
 \emph{lakeside},
 \emph{mushroom},
 \emph{measuring cup}, and
-\emph{projectile}.
+\emph{projectile}, which we refer to as C10'.
 
 The categories for the C5 and C10 data sets were hand-selected to contain
-semantically-related labels. Specifically, in C5
-\emph{church}, \emph{obelisk}, and \emph{yurt}
-have stronger semantic relationships to each other than to the two other
-classes.
-Similarly, in C10,
+semantically-related labels. Specifically, in C5 \emph{church}, \emph{obelisk},
+and \emph{yurt} have stronger semantic relationships to each other than to the
+two other classes (see Figure \ref{fig:aff-5_1}).  Similarly, in C10,
 \emph{meerkat} and \emph{bluetick} are similar (both are animals).
 \emph{Limousine}, \emph{sax}, and \emph{shovel} are all artificially created
-instruments for various applications.
-Categories \emph{church}, \emph{obelisk}, and \emph{yurt} are also present in
-this set.
-The last set deliberately contains classes which are less semantically similar
-to each other.
-
+instruments for various applications.  Categories \emph{church}, \emph{obelisk},
+and \emph{yurt} are also present in this set.  C10' deliberately contains
+classes which are less semantically similar to each other.
 
 \begin{figure*}[t]
 %\begin{figure}[t]
@@ -117,17 +110,18 @@ to each other.
 
 For each class set, we train a VGGNet with various soft labeling schemes. The
 VGGNet architecture is pictured in Figure \ref{fig:vgg16arch}. The only
-modification to the architecture we made was to vary the number of predicted
-class probabilities based on the class set.
+modification we made to the architecture was varying the size of the softmax
+layer based on the class set sizprobabilities e.
 
-Figures \ref{fig:5_1-train_100} and \ref{fig:5_1-train_1260} shows results on
-the C5 class set. We see that the soft-labeling scheme consistently outperform
-the one-hot labeling scheme and the random labeling scheme for the case of 100
-training examples per class. However, the performance is less significant when
-the number of training examples increases to 1260. This can be explained by the
-fact that soft labeling schemes become less valuable when the number of training
-examples increases. Soft labeling schemes to be particularily useful when the
-number of training examples are small.
+Figures \ref{fig:5_1-train_100} and \ref{fig:5_1-train_1260} show results on the
+C5 class set. We see that the soft-labeling scheme consistently outperform the
+one-hot labeling scheme and the random labeling scheme for the case of 100
+training examples per class. However, the improvement becomes less significant
+when the number of training examples per class increases to 1260. This can be
+explained by the fact that the additional information encoded in the soft labels
+becomes less valuable when the number of training examples increases. This is
+consistent with \cite{hinton2015distilling}, in which an expert model (which was
+trained on one-hot labels) is the model is the source of the soft labels.
 
 \begin{figure}[!tb]
 %\begin{figure}[t]
@@ -157,9 +151,9 @@ Figures \ref{fig:10_1-train_100} and \ref{fig:10_1-train_1260} demonstrate the
 performance of various labeling schemes on the C10 dataset. Once again we see
 improved performance for the soft labeling schemes over one-hot and random soft
 labeling schemes. The performance boost seems to be a bit more significant here
-than in the five-class case, perhaps owing to the fact that the increase in the
-number of classes provides more of an opportunity to convey more relationships
-between classes.
+than in the C5 class set, perhaps owing to the fact that the increase in the
+number of classes provides soft labels with more opportunities to convey
+information in the form of relationships between classes.
 
 \begin{figure}[!tb]
 %\begin{figure}[t]
@@ -185,7 +179,8 @@ between classes.
 
 The fact that GIST soft-labels performed well was a nice surprise for us. Even
 though visual similarity between classes is often noisy, it still provides
-enough of a valuable signal to improve learning (most of the time).
+enough of a valuable signal to improve learning, at least for the 1260 training
+examples per-class case.
 
 % As a proof of concept, we trained two models on a small amount of data from
 % ImageNet. We used 11 ImageNet classes -
@@ -255,23 +250,28 @@ enough of a valuable signal to improve learning (most of the time).
   \label{tbl:semantic_misses}
 \end{table}
 
-Table \ref{tbl:semantic_misses} attempts to get a handle on the types of errors
-that each model is making. We use a similar semantic evaluation metric to
-\cite{zhao2011large}, but with the following deviation: each of the evaluation
-metrics is defined by an affinity matrix. If the correct prediction is made, the
-model gets 1 point. If a model predict class $j$, but the correct class was $i$,
-then the model gets a point value equal to $A_{ij}$.
+Table \ref{tbl:semantic_misses} illustrates the quality of mistakes each model
+makes. We use a similar semantic evaluation metric to \cite{zhao2011large}, but
+with the following deviation: for an affinity matrix $A$, a prediction for class
+$i$ when the correct class is $j$ yields a score of $A_{ij}$ for that image. For
+example, if $i = j$, this corresponds to a correct prediction and the model is
+awarded 1 point (because $A_{ii}$ = 1 for all $i$), which is identical to
+standard accuracy. However, if the model makes an incorrect prediction (i.e. $i
+\neq j$), then it is awarded a score of $A_{ij}$. Recall that $A_{ij}$ is the
+affinity for classes $i$ and $j$ and will be high when the two classes are
+similar. Hence the model gets more credit for predicting related classes.
 
 We can see that the model trained on one hot labels performs highest on WN-PATH,
 but both word2vec and WordNet perform higher on WN-ZHAO. WN-ZHAO is based on the
 affinity matrix calculated with equation \ref{eq:wordnet_dist}. We believe that
-performance is higher on WN-ZHAO for both the WordNet and word2vec soft labels
-because of the due to the diffuse property of the WN-PATH affinity matrix versus
+performance is higher for models trained with WordNet and word2vec soft labels
+on WN-ZHAO because of the diffuse property of the WN-PATH affinity matrix versus
 the sparseness of the WN-ZHAO affinity matrix. Because WN-PATH is more diffuse,
-the one-hot model does not get penalized as harshly for making a bad semantic
-mistake, whereas it gets penalized much more harshly with WN-ZHAO. The score is
-slightly inflated for the WordNet model because the WordNet model was trained
-directly using the affinity matrix, but the word2vec results require no such
+the one-hot model does not get penalized as harshly for making bad semantic
+mistakes, whereas it is penalized much more harshly with WN-ZHAO.  We
+acknowledge that the WordNet model's score on WN-ZHAO is inflated because it was
+was trained directly on the WN-ZHAO affinity matrix, but we are pleased to see
+that word2vec also outperforms one-hot and requires no such require no such
 disclaimer.
 
 Figure \ref{fig:tsne} shows a t-SNE plot of the predicted softmax probability
