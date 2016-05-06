@@ -77,7 +77,7 @@ The next class set consists of the following ten classes:
 \emph{bluetick}, and
 \emph{mushroom}.
 We refer to this class set as C10 throughout.
-The next class set consists of the following ten classes:
+The last set consists of the following ten classes:
 \emph{limousine},
 \emph{fiddler crab},
 \emph{baseball},
@@ -89,21 +89,36 @@ The next class set consists of the following ten classes:
 \emph{measuring cup}, and
 \emph{projectile}.
 
+The categories for the C5 and C10 data sets were hand-selected to contain
+semantically-related labels. Specifically, in C5
+\emph{church}, \emph{obelisk}, and \emph{yurt}
+have stronger semantic relationships to each other than to the two other
+classes.
+Similarly, in C10,
+\emph{meerkat} and \emph{bluetick} are similar (both are animals).
+\emph{Limousine}, \emph{sax}, and \emph{shovel} are all artificially created
+instruments for various applications.
+Categories \emph{church}, \emph{obelisk}, and \emph{yurt} are also present in
+this set.
+The last set deliberately contains classes which are less semantically similar
+to each other.
+
+
 \begin{figure*}[t]
 %\begin{figure}[t]
   \centering
   \includegraphics[width=1.0\textwidth]{figs/vgg16arch.png}
   \caption{
       VGGNet architecture. Image credit
-      http://blog.christianperone.com/tag/keras/.
+      \url{http://blog.christianperone.com/tag/keras/}.
   }
   \label{fig:vgg16arch}
 \end{figure*}
 
 For each class set, we train a VGGNet with various soft labeling schemes. The
 VGGNet architecture is pictured in Figure \ref{fig:vgg16arch}. The only
-modification to the architecture we made was to vary the number of
-predicted class probabilities based on the class set.
+modification to the architecture we made was to vary the number of predicted
+class probabilities based on the class set.
 
 Figures \ref{fig:5_1-train_100} and \ref{fig:5_1-train_1260} shows results on
 the C5 class set. We see that the soft-labeling scheme consistently outperform
@@ -119,9 +134,10 @@ number of training examples are small.
   \centering
   \includegraphics[width=0.5\textwidth]{figs/5_1-train_100.png}
   \caption{
-      Accuracies for a variety of label sharing schemes on C5 class set. Our
-      soft-labeling schemes consistently outperform one hot and random labeling
-      schemes, especially with a small number of training examples.
+      Accuracies for a variety of label sharing schemes on C5 class set,
+      trained on 100 images per class. Our soft-labeling schemes consistently
+      outperform one hot and random labeling schemes, especially with a small
+      number of training examples.
   }
   \label{fig:5_1-train_100}
 \end{figure}
@@ -131,9 +147,8 @@ number of training examples are small.
   \centering
   \includegraphics[width=0.5\textwidth]{figs/5_1-train_1260.png}
   \caption{
-      Accuracies for a variety of label sharing schemes on C5 class set. With
-      more training examples, performance gains become less significant for
-      soft-labeling schemes.
+      Comparison of accuracies for the C5 class set using 1260 training images
+      per class.
   }
   \label{fig:5_1-train_1260}
 \end{figure}
@@ -151,9 +166,8 @@ between classes.
   \centering
   \includegraphics[width=0.5\textwidth]{figs/10_1-train_100.png}
   \caption{
-      Accuracies for a variety of label sharing schemes on C10 class set. Our
-      soft-labeling consistently outperform one-hot labeling and random
-      labeling.
+      Comparison of accuracies for the C10 class set using 100 training images
+      per class.
   }
   \label{fig:10_1-train_100}
 \end{figure}
@@ -163,9 +177,8 @@ between classes.
   \centering
   \includegraphics[width=0.5\textwidth]{figs/10_1-train_1260.png}
   \caption{
-      Accuracies for a variety of label sharing schemes on C10 class set. Our
-      soft-labeling consistently outperform one-hot labeling and random
-      labeling.
+      Comparison of accuracies for the C10 class set using 1260 training images
+      per class.
   }
   \label{fig:10_1-train_1260}
 \end{figure}
@@ -233,13 +246,13 @@ enough of a valuable signal to improve learning (most of the time).
         Dependency & 0.091352 & 0.394429\\
         One Hot & \textbf{0.361664} & 0.533101\\
     \end{tabular}
-  \label{tbl:semantic_misses}
   \caption{
       Semantic evaluation on only missed examples. Models trained
       with soft labels generally make more semantically meaningful errors. Our
       semantic evaluation criterias are similar to \cite{zhao2011large}, with a
       slight variation.
   }
+  \label{tbl:semantic_misses}
 \end{table}
 
 Table \ref{tbl:semantic_misses} attempts to get a handle on the types of errors
