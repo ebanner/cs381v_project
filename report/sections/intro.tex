@@ -4,17 +4,20 @@
 \begin{figure*}[t]
   \centering
 
-  \subfloat[Church (left) and obelisks (center and right).]
+  \subfloat[
+    Church (left) and obelisks (center and right). All three images were
+    predicted as \emph{obelisk}.
+  ]
     {\includegraphics[width=.95\textwidth]{figs/qualitative_images.png}}
 
-  \subfloat[The CNN probability distributions of the images above.]
+  \subfloat[The CNN's predicted probability distributions of the images above.]
     {\includegraphics[width=.95\textwidth]{figs/qualitative_probs.png}}
 
   \caption{
     The CNN gives higher probability values to objects which visually similar to
     the ground truth. Here, the classifier predicted that the images were
-    \emph{obelisk}. These examples show visual similarities between
-    \emph{church} and \emph{obelisk}. These categories are also similar
+    \emph{obelisk}. These examples show visual similarities between the
+    \emph{church} and \emph{obelisk} categories, which are also similar
     semantically.
   }
   \label{fig:qualitative_results}
