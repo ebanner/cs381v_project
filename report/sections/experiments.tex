@@ -38,52 +38,44 @@
   \label{tbl:semantic_eval}
 \end{table*}
 
-\begin{table*}[t]
-    \centering
-    \begin{tabular}{lrrrr}
-         & WN-PATH & WN-WUP & WN-ZHAO & GIST\\
-        \hline
-        WordNet + GIST & 0.261114 & 0.49529 & 0.456478 & 0.355417\\
-        word2vec & 0.2995 & 0.59544 & 0.550523 & 0.38476\\
-        WordNet & 0.36027 & 0.608057 & 0.581415 & 0.43479\\
-        Dependency & 0.091352 & 0.447535 & 0.394429 & 0.331348\\
-        One Hot & 0.361664 & 0.566278 & 0.533101 & 0.432775\\
-    \end{tabular}
-  \label{tbl:semantic_misses}
-  \caption{
-      Semantic evaluation on missed examples. It can be seen that the soft
-      labeling schemes generally make more semantically meaningful errors than
-      the one-hot labeling scheme.
-  }
-\end{table*}
+% We will evaluate and compare the performance of deep convolutional neural
+% networks trained on ImageNet with soft labels and 1-hot labels.
+% We will train the VGG-16 model \cite{simonyan2014very} from scratch, and see
+% how well it learns using the different labeling schemas. Our goal is to try to
+% find the optimal hyperparameters for which soft label training will outperform
+% 1-hot labels.
+% We will also analyze the errors made by both models to see how semantically
+% relevant the models are.
+% We plan to use the evaluation method introduced in \cite{zhao2011large} for
+% testing semantically relevant errors.
 
-We will evaluate and compare the performance of deep convolutional neural
-networks trained on ImageNet with soft labels and 1-hot labels.
-We will train the VGG-16 model \cite{simonyan2014very} from scratch, and see
-how well it learns using the different labeling schemas. Our goal is to try to
-find the optimal hyperparameters for which soft label training will outperform
-1-hot labels.
-We will also analyze the errors made by both models to see how semantically
-relevant the models are.
-We plan to use the evaluation method introduced in \cite{zhao2011large} for
-testing semantically relevant errors.
+% We will also experiment with pretrained networks and different architectures to
+% see how effectively they can learn with soft labels compared to 1-hot labels.
+% In \cite{hinton2015distilling} the authors showed that they can use soft labels
+% to train simpler models quickly that perform nearly as well as the advanced
+% models with many more parameters. We hope to mirror these results, but using
+% semantic weights for the learning targets.
+% Finally, we plan to experiment with training on fewer examples to see if our
+% approach can help in cases where labeled data is limited.
 
-We will also experiment with pretrained networks and different architectures to
-see how effectively they can learn with soft labels compared to 1-hot labels.
-In \cite{hinton2015distilling} the authors showed that they can use soft labels
-to train simpler models quickly that perform nearly as well as the advanced
-models with many more parameters. We hope to mirror these results, but using
-semantic weights for the learning targets.
-Finally, we plan to experiment with training on fewer examples to see if our
-approach can help in cases where labeled data is limited.
+% Throughout all of our experiments, we will compare different schemes for
+% obtaining the soft labels. We will use Word2Vec, WordNet, and possibly visual
+% similarity, and discover optimal distributions for these weights.
+% We hope to look at different linguistic semantic similarity measures and
+% compare them with visual similarity measures, and analyze which object
+% categories relate well in both the visual and semantic domain.
 
-Throughout all of our experiments, we will compare different schemes for
-obtaining the soft labels. We will use Word2Vec, WordNet, and possibly visual
-similarity, and discover optimal distributions for these weights.
-We hope to look at different linguistic semantic similarity measures and
-compare them with visual similarity measures, and analyze which object
-categories relate well in both the visual and semantic domain.
+We consider two class sets, which were taken from ImageNet. The first class set
+consists of the following five classes: \emph{sax}, \emph{church},
+\emph{obelisk}, \emph{yurt}, \emph{limousine}. We refer to this class set as C5.
+The next class set consists of the following ten classes: \emph{sax},
+\emph{limousine}, \emph{shovel}, \emph{baseball}, \emph{meerkat}, \emph{church},
+\emph{yurt}, \emph{obelisk}, \emph{bluetick}, \emph{mushroom}. We refer to this
+class set as C10 throughout.
 
+Figures \ref{fig:5_1-train_100} shows results on the C5 class set. We see that
+the soft-labeling scheme consistently outperform the one-hot labeling scheme and
+the random labeling scheme. 
 
 \begin{figure}[!tb]
 %\begin{figure}[t]
@@ -99,13 +91,34 @@ categories relate well in both the visual and semantic domain.
 \begin{figure}[!tb]
 %\begin{figure}[t]
   \centering
-  \includegraphics[width=0.5\textwidth]{figs/tsne.png}
+  \includegraphics[width=0.5\textwidth]{figs/5_1-train_1260.png}
   \caption{
-      t-SNE visualization of predicted softmax probabilities for test set.
-      Notice yurt and obelisk, two labels with a high semantic score, cluster
-      together.
+      Accuracies for a variety of label sharing schemes. Our soft-labeling
+      consistently outperform one-hot labeling and random labeling.
   }
-  \label{fig:tsne}
+  \label{fig:5_1-train_100}
+\end{figure}
+
+\begin{figure}[!tb]
+%\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.5\textwidth]{figs/10_1-train_100.png}
+  \caption{
+      Accuracies for a variety of label sharing schemes. Our soft-labeling
+      consistently outperform one-hot labeling and random labeling.
+  }
+  \label{fig:10_1-train_100}
+\end{figure}
+
+\begin{figure}[!tb]
+%\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.5\textwidth]{figs/10_1-train_1260.png}
+  \caption{
+      Accuracies for a variety of label sharing schemes. Our soft-labeling
+      consistently outperform one-hot labeling and random labeling.
+  }
+  \label{fig:10_1-train_100}
 \end{figure}
 
 \begin{figure}[!tb]
@@ -166,9 +179,40 @@ adjusted at all for this experiment - we just took the cosine similarity
 between the raw Word2Vec features.
 
 
+\begin{figure}[!tb]
+%\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.5\textwidth]{figs/tsne.png}
+  \caption{
+      t-SNE visualization of predicted softmax probabilities for test set.
+      Notice yurt and obelisk, two labels with a high semantic score, cluster
+      together.
+  }
+  \label{fig:tsne}
+\end{figure}
+
 
 \textbf{TODO:} \cite{budanitsky2006evaluating} has word distance metrics, talk
 about using those.
+
+\begin{table*}[t]
+    \centering
+    \begin{tabular}{lrrrr}
+         & WN-PATH & WN-WUP & WN-ZHAO & GIST\\
+        \hline
+        WordNet + GIST & 0.261114 & 0.49529 & 0.456478 & 0.355417\\
+        word2vec & 0.2995 & 0.59544 & 0.550523 & 0.38476\\
+        WordNet & 0.36027 & 0.608057 & 0.581415 & 0.43479\\
+        Dependency & 0.091352 & 0.447535 & 0.394429 & 0.331348\\
+        One Hot & 0.361664 & 0.566278 & 0.533101 & 0.432775\\
+    \end{tabular}
+  \label{tbl:semantic_misses}
+  \caption{
+      Semantic evaluation on missed examples. It can be seen that the soft
+      labeling schemes generally make more semantically meaningful errors than
+      the one-hot labeling scheme.
+  }
+\end{table*}
 
 
 %\subsection{CNN Architecture}
