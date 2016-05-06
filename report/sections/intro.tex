@@ -1,5 +1,26 @@
 \section{Introduction}
 
+
+\begin{figure*}[t]
+  \centering
+
+  \subfloat[Church (left) and obelisks (center and right).]
+    {\includegraphics[width=.95\textwidth]{figs/qualitative_images.png}}
+
+  \subfloat[The CNN probability distributions of the images above.]
+    {\includegraphics[width=.95\textwidth]{figs/qualitative_probs.png}}
+
+  \caption{
+    The CNN gives higher probability values to objects which visually similar to
+    the ground truth. Here, the classifier predicted that the images were
+    \emph{obelisk}. These examples show visual similarities between
+    \emph{church} and \emph{obelisk}. These categories are also similar
+    semantically.
+  }
+  \label{fig:vgg16arch}
+\end{figure*}
+
+
 Deep neural networks have been very popular in recent years due to their high
 capacity and strong generalization abilities.  Convolutional neural networks
 (CNNs) have been especially popular in computer vision for image classification.
