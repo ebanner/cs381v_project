@@ -1,17 +1,21 @@
 \section{Introduction}
 
 
-\begin{figure*}[t]
+\begin{figure}[ht!]
   \centering
 
   \subfloat[
     Church (left) and obelisks (center and right). All three images were
     predicted as \emph{obelisk}.
   ]
-    {\includegraphics[width=.95\textwidth]{figs/qualitative_images.png}}
+    {\includegraphics[width=.45\textwidth]{figs/qualitative_images.png}}
 
-  \subfloat[The CNN's predicted probability distributions of the images above.]
-    {\includegraphics[width=.95\textwidth]{figs/qualitative_probs.png}}
+  \subfloat[
+    The CNN's predicted probability distributions of the images above.
+    The predictions for \emph{obelisk}, \emph{yurt}, and \emph{church}
+    are the largest (purple, teal, and red, respectively).
+  ]
+    {\includegraphics[width=.45\textwidth]{figs/qualitative_probs.png}}
 
   \caption{
     The CNN gives higher probability values to objects which visually similar to
@@ -21,7 +25,7 @@
     semantically.
   }
   \label{fig:qualitative_results}
-\end{figure*}
+\end{figure}
 
 
 Deep neural networks have been very popular in recent years due to their high
