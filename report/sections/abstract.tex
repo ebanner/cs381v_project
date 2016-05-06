@@ -2,20 +2,20 @@
   {\it
 
     Convolutional neural networks achieve near human-level performance on image
-    classification on many important datasets. Though performance is impressive,
-    these models are data hungry and require on the order of thousands of
-    examples per-class. This property can be partly traced back to the fact that
-    supervision comes in the form of impoverished ``one-hot'' learning signals
-    corresponding to singular object classes, which convey no information for
-    how classes are related.
+    classification on many challenging datasets. Though impressive, such models
+    are data hungry and require on the order of thousands of examples per-class
+    to excel.  One of the reasons for this property is that supervision comes in
+    the form of impoverished ``one-hot'' vectors, which convey no information
+    for how classes are related.
 
     Inspired by work in semantic label sharing and model compression, we aim to
     enrich the learning signal for image classification using a variety of
-    methods. We show that training with soft-labels allow us to train models
-    with fewer parameters and data, while achieving performance comparable to
-    larger models trained on more examples in the traditional way.  We evaluate
-    with a standard accuracy, as well as semantic-relatedness measures and
-    demonstrate that our model make more semantically-sensible errors.
+    methods. We show that training with soft-labels allows us to train models
+    with less data. We evaluate models trained with our augmented learning
+    objective with standard accuracy, as well as with more semantically rich
+    measures.  Through experiments and evaluation, we demonstrate that models
+    trained with soft labels achieve higher accuracy while make more
+    semantically-sensible errors than models trained with one hot vectors.
 
 }
 \end{abstract}
