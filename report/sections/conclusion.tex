@@ -1,5 +1,38 @@
 \section{Conclusion}
 
-Since we have not finished our experiments yet, we have nothing to conclude.
-However, based on our preliminary results, we believe that we can see some
-performance gains by using soft labels.
+We found that linguistic information can help boost overall classification
+accuracy by a small amount, especially in the case where the amount of available
+training data is small.
+Additionally, we observed that the models trained on soft labels achieved their
+maximum validation accuracy in fewer epochs than those trained on 1-hot labels.
+We also confirmed our hypothesis that the neural networks trained on soft
+labels would make more semantically reasonable errors than those trained the
+traditional way.
+
+
+\subsection{Future Work}
+
+We believe that this work shows promise for using soft labels, but we have only
+begun to touch the surface.
+First, we would like to run many more experiments with different
+hyperparameters and affinity matrix normalizations, and take the average
+performance scores of many repeated iterations of the same experiment.  We can
+also explore different Word2Vec training sets and many other WordNet distance
+metrics, and compare how each does on a variety of data sets.
+
+Next, we would like to expand the size and scope of our training data, as we
+have only several subsets of 25 ImageNet classes. Ultimately, we would like to
+train on the entirety of ImageNet, and use data augmentation methods to come
+closer to current state-of-the-art accuracy scores.
+Another natural extension is to train a wider variety of deep neural network
+architectures, including simpler models (with a much smaller number of
+parameters) to test our hypothesis that we can train simpler models faster,
+as shown in \cite{hinton2015distilling}.
+
+Finally, we would like to see how well our method extends to pre-trained models
+(fine-tuning) and whether we can get any reasonable performance in zero-shot
+learning. Zero-shot learning could potentially be achieved by training the CNN
+on images of classes that are semantically similar to a class which we have no
+training examples for. By emphasizing that certain features contribute to the
+unseen object category through soft labels, we believe that some information
+necessary to identify the unknown class would be learned by the model.
