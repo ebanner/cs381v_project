@@ -128,22 +128,29 @@ defined via \emph{linguistic dependencies}, nearby words tend to be
 \emph{semantically} similar. We examine the effect word context has on semantic
 label sharing for image classification.
 
-To compute the similarity between two labels with word vectors, we compute the
-cosine similarity between the two vectors. We take the additional following step
-to normalize the similarity scores of the off-diagonal. For a label $i$, we
-normalize all of the off-diagonal similarity scores to sum to $k$, where $k$ is
-a hyperparameter. We found the value of $k = 0.5$ to work the best. Typically
-when normalizing a distribution, $k$ is taken to be 1. However, when the
-similarity distribution is very sparse, this can mean that the similarity
-between two classes can be close to a 1.0, which confuses learning. In order to
-guard against this, we enfornce the contraint that the similarity between two
-distinct classes cannot be greater than $k$.
+We construct an affinity matrix $A$ using word vectors as follows: we set the
+main diagonal of the affinity matrix to 1 (i.e. $A_{ii}$ = 1 for all $i$). For
+the off diagonals, we set $A_{ij}$ to be the cosine similarity between the word
+vectors corresponding to label $i$ and label $j$. We perform the additional step
+of applying the scaling procedure and normalization procedure to $A$: for each
+row of $A$, we apply the scaling procedure of \cite{zhao2011large} to all the
+elements with the main diagonal element removed and normalize these values to
+sum to $s$, where $s$ is a hyperparameter. We found a value of $s = 0.5$ to work
+well.  We performed this additional scaling and normalization procedure because
+simply applying the scaling procedure of \cite{zhao2011large} to the each row
+(i.e.  including the main diagonal element) resulted in relatively equal
+probability mass for each off-diagonal entry of $A$. Additionally, each of these
+off-diagonal probability masses were near-zero, hence normalizing them to sum up
+to 0.5 prevents perpetually negative gradient signals for off-diagonal classes.
 
-The result of this process is that the affinity matrix is no longer symmetric.
-The largest asymmetries occur when one class is not similar to any other classes
-(e.g. \emph{sax}), and assigns uniform probability mass to all other classes.
-Meanwhile, another class (e.g. \emph{yurt}), who has high similarity to other
-classes, assigns near-zero probability mass to \emph{sax}.
+A side effect of this scaling and normalization procedure to each row of the
+affinity matrix is that $A$ is no longer symmetric. This is illustrated in
+Figure \ref{fig:aff-5_1}. For the most part we observe $A_{ij} \approx A_{ji}$.
+The most drastic asymmetries occur when class $i$ is uniformly similar to all
+classes and class $j$ has high similarity with one or two classes. For example,
+\emph{sax} has relatively uniform similarity to all other classes, while
+\emph{yurt} has high similarity for \emph{church} and \emph{obelisk} and
+near-zero similarity to to \emph{sax}.
 
 \subsection{Visual Similarity}
 
