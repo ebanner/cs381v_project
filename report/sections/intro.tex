@@ -18,13 +18,15 @@ training data needed by the simpler model while still producing comparable
 results, and because it has fewer parameters, it is able to evaluate data
 faster.
 
-We attempt to improve classification results and reduce the amount of required
-training data for a deep CNN by leveraging the semantic relationships between
-object categories embedded in natural language.
-Doing so can help significantly reduce the time it takes to train and test a
-deep model. Using a simpler model can also help reduce strict hardware
-requirements, making it useful on low-end consumer computers or even mobile
-devices.
+We attempt to approximate the expert network in \cite{hinton2015distilling} by
+leveraging existing sources of data which can be used to compute
+\emph{similarities} between labels, effectively providing a richer learning
+signal during training. We conjecture that this augmented learning signal will
+result in improved classification results with less data.  As a result, the time
+to train such a model can be significantly reduced. Using a simpler model can
+also help reduce strict hardware requirements, making it useful on low-end
+consumer computers or even mobile devices.
+
 Finally, by reducing the amount of required training data, we hope to show that
 our technique can be applied to domains where labeled training examples are
 limited, which may have previously prevented deep learning techniques from being
