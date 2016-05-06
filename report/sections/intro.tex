@@ -1,36 +1,38 @@
 \section{Introduction}
 
-Deep neural networks have been very popular in recent years because of their
-potential to greatly improve results of pretty much any classification task
-that they are applied to.
-Convolutional neural networks (CNNs) have been especially popular in computer
-vision for image classification.
+Deep neural networks have been very popular in recent years due to their high
+capacity and strong generalization abilities.  Convolutional neural networks
+(CNNs) have been especially popular in computer vision for image classification.
 However, despite their empirical success, training a deep learning model
 generally requires a massive amount of data, often in the order of millions of
-images.
+images. Such large amounts of labeled data are expensive to obtain. Hence 
+improvements which result in decreasing the number of labeled examples to train
+a high performing CNN would dramatically reduce the human component of the
+training process.
 
 Because of the high computational cost of training and even evaluating new data
-on deep neural networks, \cite{hinton2015distilling} have explored a new method
-for transfering the learned weights of a complicated deep neural network model
+on deep neural networks, \cite{hinton2015distilling} explored a new method
+for transfering the learned weights of a large, expert deep neural network model
 (i.e. a model with a large number of parameters) to a simpler one (with
-significantly fewer parameters). They showed that this can reduce the amount of
-training data needed by the simpler model while still producing comparable
-results, and because it has fewer parameters, it is able to evaluate data
-faster.
+significantly fewer parameters) by training the simpler model with \emph{soft
+labels} produced by the expert model. They showed that this can reduce the
+amount of training data needed by the simpler model while still producing
+comparable results, and because it has fewer parameters, it is able to evaluate
+data faster.
 
-We attempt to approximate the expert network in \cite{hinton2015distilling} by
-leveraging existing sources of data which can be used to compute
-\emph{similarities} between labels, effectively providing a richer learning
-signal during training. We conjecture that this augmented learning signal will
-result in improved classification results with less data.  As a result, the time
-to train such a model can be significantly reduced. Using a simpler model can
-also help reduce strict hardware requirements, making it useful on low-end
-consumer computers or even mobile devices.
+We attempt to approximate the soft labels produced by the expert network in
+\cite{hinton2015distilling} \emph{cheaply} by leveraging existing sources of
+data which can be used to compute \emph{similarities} between labels, and allows
+for a soft labeling scheme to be used.  We show that this augmented learning
+signal results in improved classification results over a model trained with a
+one-hot learning signal. By consequence, such models can be trained with a
+smaller amount of data to achieve comparable performance, thus the time to train
+such a model can be significantly reduced.
 
-Finally, by reducing the amount of required training data, we hope to show that
-our technique can be applied to domains where labeled training examples are
-limited, which may have previously prevented deep learning techniques from being
-used in those settings.
+%Finally, by reducing the amount of required training data, we hope to show that
+%our technique can be applied to domains where labeled training examples are
+%limited, which may have previously prevented deep learning techniques from being
+%used in those settings.
 
 %% This is more related works:
 %There has been a lot of work done in studying the relationship between vision
