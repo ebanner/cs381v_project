@@ -23,17 +23,18 @@ other.
 
 \begin{table}[!tb]
   \centering
-  \begin{tabular}{|c|c|c|c|c|}
+  \begin{tabular}{|c|c|c|c|c|c|}
     \hline
-      & Donkey & Mule & Truck & Cat \\
+      & Sax & Limo & Church & Yurt & Obelisk \\
     \hline
-      ``Donkey'' 1-hot & 1 & 0 & 0 & 0 \\
+      \textbf{1-hot} & 1 & 0 & 0 & 0  & 0 \\
     \hline
-      ``Donkey'' soft & 0.8 & 0.15 & 0.0 & 0.05 \\
+      \textbf{Soft} & 1 & 0.5 & 0.14 & 0.43 & 0.43 \\
     \hline
   \end{tabular}
   \caption{
-    A toy example of a 1-hot label compared to a soft label.
+    A \emph{1-hot label} vector vs. a \emph{soft label} vector for
+    ``saxophone'' among 5 classes.
   }
   \label{tbl:soft_labels}
 \end{table}
@@ -55,6 +56,8 @@ mass to semantically-related classes. A model which is able to assign
 probability mass to semantically-related classes consequently has a richer
 understanding of the image than a model which assigns high probability mass to
 unrelated classes. An example is shown in Table \ref{tbl:soft_labels}.
+Note that the identity is always kept at 1; that is, a class is always
+100\% similar to itself.
 
 A soft labeling scheme can be visualized by an \emph{affinity matrix}. Figure
 \ref{fig:aff-5_1} shows a five class affinity matrix. For affinity matrix $A$,
@@ -90,11 +93,19 @@ Using the distance metric in equation \ref{eq:wordnet_dist}, we follow the work
 of \cite{fergus2010semantic} and \cite{zhao2011large} for defining soft labels
 for a deep CNN classifier. We experimentally test a wide variety of
 hyperparameters and values for $\kappa$, which measures how diffuse or sparse
-the similarity distribution is.  Moreover, we further analyze the performance
-tradeoffs between hyperonym and meronym relations.  Using both relationships has
-been introduced in \cite{marszalek2007semantic} for hierarchical classification,
-but to the best of our knowledge has not been used in comparing soft label
-performance before \textbf{(DO WE DO THIS???)}.
+the similarity distribution is. We find that values between 3 and 7 work best.
+
+We use three different similarity metrics between hypernyms in WordNet.
+First, we use equation \ref{eq:wordnet_dist} as defined in \cite{zhao2011large}.
+We also use the WUP distance metric (as defined in
+\cite{budanitsky2006evaluating}) and the PATH distance metric:
+\begin{equation}
+\label{eq:path_dist}
+\mathrm{PATH}(\mathrm{label}_i, \mathrm{label}_j) =
+  \frac{1}{\mathrm{path\_len}(\mathrm{label}_i, \mathrm{label}_j)}
+\end{equation}
+In general, we found that equations \ref{eq:wordnet_dist} and \ref{eq:path_dist}
+work best.
 
 
 \subsubsection{Word Embeddings} \label{word2vec}
@@ -150,29 +161,28 @@ schemes.
 % ways of defining and weighting soft labels.  We use several existing
 % methods to compute the similarities between different image categories.
 
-First, we will take the average GIST descriptor \cite{oliva2001modeling} values
-for each category across all images in the training data set. We will use the
-scaled similarity between these descriptors as a distribution across the soft
-labels.
+We take the average GIST descriptor \cite{oliva2001modeling} values for each
+category across all images in the training data set. We then use the scaled
+similarity between these descriptors as a distribution across the soft labels.
 Since GIST is a global descriptor, we expect it to capture more of the
 background contextual information rather than similarities between the objects
 themselves.
 
-To better represent the categories directly, we can also experiment with
-visual word clusters mined from images of different object categories.
-We expect that clustering SIFT descriptors \cite{lowe1999object} should work
-reasonably well.
-The similarity metric can be defined as the distance between the cluster
-centroids into which the images of different categories fall.
-We can also explore using visual vocabulary trees, introduced by
-\cite{nister2006scalable}.
-
-We can investigate many other methods. The most notable and relevant to our
-work is \cite{li2010building}, who have successfully used their visual
-similarity approach for improving hierarchical image classification.
-We can also explore other works in unsupervised clustering, including most
-recent advancements using deep neural networks in unsupervised visual
-clustering
-(Jianwei Yang, Devi Parikh, and Dhruv Batra, 2016 - not yet published).
+%To better represent the categories directly, we can also experiment with
+%visual word clusters mined from images of different object categories.
+%We expect that clustering SIFT descriptors \cite{lowe1999object} should work
+%reasonably well.
+%The similarity metric can be defined as the distance between the cluster
+%centroids into which the images of different categories fall.
+%We can also explore using visual vocabulary trees, introduced by
+%\cite{nister2006scalable}.
+%
+%We can investigate many other methods. The most notable and relevant to our
+%work is \cite{li2010building}, who have successfully used their visual
+%similarity approach for improving hierarchical image classification.
+%We can also explore other works in unsupervised clustering, including most
+%recent advancements using deep neural networks in unsupervised visual
+%clustering
+%(Jianwei Yang, Devi Parikh, and Dhruv Batra, 2016 - not yet published).
 
 % Possibly the trained experts thing?
