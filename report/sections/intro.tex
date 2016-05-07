@@ -12,13 +12,13 @@
 
   \subfloat[
     The CNN's predicted probability distributions of the images above.
-    The predictions for \emph{obelisk}, \emph{yurt}, and \emph{church}
-    are the largest (purple, teal, and red, respectively).
+    \emph{obelisk}, \emph{yurt}, and \emph{church}, semantically and visually
+    similar objects, are consistently given high probabilities.
   ]
     {\includegraphics[width=.45\textwidth]{figs/qualitative_probs.png}}
 
   \caption{
-    The CNN gives higher probability values to objects which visually similar to
+    The CNN gives higher probability values to objects which are visually similar to
     the ground truth. Here, the classifier predicted that the images were
     \emph{obelisk}. These examples show visual similarities between the
     \emph{church} and \emph{obelisk} categories, which are also similar
@@ -43,21 +43,22 @@ on deep neural networks, \cite{hinton2015distilling} explored a new method
 for transferring the learned weights of a large, expert deep neural network model
 (i.e. a model with a large number of parameters) to a simpler one (with
 significantly fewer parameters) by training the simpler model with \emph{soft
-labels} produced by the expert model. They showed that this can reduce the
+labels}\footnote{
+  We define soft labels in Section \ref{sec:soft_labels}.
+} produced by the expert model. They showed that this can reduce the
 amount of training data needed by the simpler model while still producing
-comparable results, and because it has fewer parameters, it is able to evaluate
-data faster.
+comparable results. Additionally, because it has fewer parameters, it is able to
+evaluate data faster.
 
 We attempt to approximate the soft labels produced by the expert network in
 \cite{hinton2015distilling} \emph{cheaply} by leveraging existing sources of
-data which can be used to compute \emph{similarities} between labels, and allows
-for a soft labeling scheme to be used.  We show that this augmented learning
-signal results in improved classification results over a model trained with a
-one-hot learning signal. By consequence, such models can be trained with a
-smaller amount of data to achieve comparable performance, thus the time to train
-such a model can be significantly reduced.
-Figure \ref{fig:qualitative_results} shows an example of how visual and semantic
-similarity are related.
+data, namely linguistic information and visual features. We then use this
+information to compute \emph{similarities} between labels, which allows us to
+derive soft labelling schemes. We show that this augmented ground truth vector
+results in improved classification results over a model trained with a one-hot
+vectors. By consequence, such models can be trained with a smaller amount of
+data to achieve comparable performance. Figure \ref{fig:qualitative_results}
+shows an example of how visual and semantic similarity are related.
 
 %Finally, by reducing the amount of required training data, we hope to show that
 %our technique can be applied to domains where labeled training examples are
