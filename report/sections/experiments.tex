@@ -306,6 +306,14 @@ inflated because it was was trained directly on the WN-ZHAO affinity matrix, but
 we are pleased to see that word2vec also outperforms one-hot and requires no
 such require no such disclaimer.
 
+It can be seen that WordNet+GIST and Dependency do quite poorly in Table
+\ref{tab:semantic_misses}. For WordNet+GIST, we placed more of an emphasis on
+using scaling factors which placed WordNet and GIST affinity matrices on the
+same scale, rather than choosing scaling factors which demonstrated strong
+performance in isolation. As for Dependency, qualitatively we noticed poor
+rankings for class similarity (e.g. every class had \emph{yurt} as being most
+similar).
+
 Figure \ref{fig:tsne} shows a t-SNE plot of the predicted softmax probability
 vectors for the C5 class set with word2vec soft labels. We notice that images of
 \emph{yurts} and \emph{obelisks} are clustered close together, indicating that
