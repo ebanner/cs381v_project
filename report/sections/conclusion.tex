@@ -1,33 +1,40 @@
 \section{Conclusion}
 
-We found that linguistic information can help boost overall classification
+We found that by training with soft labels can help boost overall classification
 accuracy by a small amount, especially in the case where the amount of available
-training data is small.
-Additionally, we observed that the models trained on soft labels achieved their
-maximum validation accuracy in fewer epochs than those trained on 1-hot labels.
-We also confirmed our hypothesis that the neural networks trained on soft
-labels would make more semantically reasonable errors than those trained the
-traditional way.
+training data is small. We were able to do this \emph{cheaply} with off the
+shelf linguistic resources and simple image features. We also confirmed
+our hypothesis that the neural networks trained on soft labels would make more
+semantically reasonable errors than those trained the traditional way.
 
 
 \subsection{Future Work}
 
 We believe that this work shows promise for using soft labels, but we have only
-begun to touch the surface.
-First, we would like to run many more experiments with different
-hyperparameters and affinity matrix normalizations, and take the average
-performance scores of many repeated iterations of the same experiment.  We can
-also explore different Word2Vec training sets and many other WordNet distance
-metrics, and compare how each does on a variety of data sets.
+begun to scratch the surface. First, we would like to run many more experiments
+with different hyperparameters and affinity matrix normalizations, and take the
+average performance scores of many repeated iterations of the same experiment.
+We can also explore different corpora for learning word embeddings and many
+other WordNet distance metrics, and compare how each does on a variety of data
+sets. Additionally, we observed that the models trained on soft labels achieved
+their maximum validation accuracy in fewer epochs than those trained on 1-hot
+labels and would like to run more experiments to confirm this finding.  
 
-Next, we would like to expand the size and scope of our training data, as we
-have only several subsets of 25 ImageNet classes. Ultimately, we would like to
-train on the entirety of ImageNet, and use data augmentation methods to come
-closer to current state-of-the-art accuracy scores.
-Another natural extension is to train a wider variety of deep neural network
-architectures, including simpler models (with a much smaller number of
-parameters) to test our hypothesis that we can train simpler models faster,
-as shown in \cite{hinton2015distilling}.
+Next, given that we saw more improvement on C10 than C5, we would like to expand
+the size and scope of our training data. Ultimately, we would like to train on
+the entirety of ImageNet, and use data augmentation methods to come closer to
+current state-of-the-art accuracy scores. Another natural extension is to train
+a wider variety of deep neural network architectures, including simpler models
+(with a much smaller number of parameters) to test our hypothesis that we can
+train simpler models faster, as shown in \cite{hinton2015distilling}.
+
+We are also interested in generating soft labels at the \emph{image} level,
+rather than the \emph{class} level. In this setting, the class-level semantic
+similarities could be used as a weak prior, which could be refined by visual
+features. One could go one step up and use a weak classifier to inform these
+soft labels. Such an approach would go one step further in uniting the
+distillation work in \cite{hinton2015distilling} and work in more traditional
+semantic label sharing settings.
 
 Finally, we would like to see how well our method extends to pre-trained models
 (fine-tuning) and whether we can get any reasonable performance in zero-shot
