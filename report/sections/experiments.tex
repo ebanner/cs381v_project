@@ -1,11 +1,11 @@
 \section{Experiments}
 
-\begin{figure}[!tb]
+\begin{figure}[t]
 %\begin{figure}[t]
   \centering
   \includegraphics[width=0.5\textwidth]{figs/word2vec_church.png}
   \caption{
-    The Word2Vec similarity scores for \emph{church}. Other structures, such as
+    The word2vec similarity scores for \emph{church}. Other structures, such as
     \emph{obelisk} and \emph{yurt} (a type of tent) were the closest in
     similarity. \emph{Bluetick} (a type of dog) was the most distant.
   }
@@ -57,14 +57,14 @@
 % compare them with visual similarity measures, and analyze which object
 % categories relate well in both the visual and semantic domain.
 
-We consider two class sets, each of which were taken from ImageNet. The first
-class set consists of the following five classes:
+We consider three class sets, each of which were taken from ImageNet. The first
+class set, C5, consists of the following five classes:
 \emph{sax},
 \emph{church},
 \emph{obelisk},
 \emph{yurt}, and
-\emph{limousine}, which we refer to as C5.
-The next class set consists of the following ten classes:
+\emph{limousine}.
+The next class set, C10, consists of the following ten classes:
 \emph{sax},
 \emph{limousine},
 \emph{shovel},
@@ -74,8 +74,8 @@ The next class set consists of the following ten classes:
 \emph{yurt},
 \emph{obelisk},
 \emph{bluetick}, and
-\emph{mushroom}, which we refer to as C10.
-The final class set consists of the following ten classes:
+\emph{mushroom}.
+The final class set, C10', consists of the following ten classes:
 \emph{limousine},
 \emph{fiddler crab},
 \emph{baseball},
@@ -85,9 +85,9 @@ The final class set consists of the following ten classes:
 \emph{lakeside},
 \emph{mushroom},
 \emph{measuring cup}, and
-\emph{projectile}, which we refer to as C10'.
+\emph{projectile}.
 
-The categories for the C5 and C10 data sets were hand-selected to contain
+The categories for the C5 and C10 class sets were hand-selected to contain
 semantically-related labels. Specifically, in C5 \emph{church}, \emph{obelisk},
 and \emph{yurt} have stronger semantic relationships to each other than to the
 two other classes (see Figure \ref{fig:aff-5_1}).  Similarly, in C10,
@@ -108,67 +108,67 @@ classes which are less semantically similar to each other.
   \label{fig:vgg16arch}
 \end{figure*}
 
-For each class set, we train a VGGNet with various soft labeling schemes. The
-VGGNet architecture is pictured in Figure \ref{fig:vgg16arch}. The only
+For each class set, we train a VGGNet with our proposed soft labeling schemes.
+The VGGNet architecture is pictured in Figure \ref{fig:vgg16arch}. The only
 modification we made to the architecture was varying the size of the softmax
 layer based on the class set size.
 
-Figures \ref{fig:5_1-train_100} and \ref{fig:5_1-train_1260} show results on the
-C5 class set. We see that the soft-labeling scheme consistently outperform the
+Figures \ref{fig:5_1-train_100} and \ref{fig:5_1-train_1260} show results on
+C5. We see that soft-labeling schemes consistently outperform the
 one-hot labeling scheme and the random labeling scheme for the case of 100
 training examples per class. However, the improvement becomes less significant
 when the number of training examples per class increases to 1260. This can be
 explained by the fact that the additional information encoded in the soft labels
-becomes less valuable when the number of training examples increases. This is
-consistent with \cite{hinton2015distilling}, in which an expert model (which was
-trained on one-hot labels) is the model is the source of the soft labels.
+becomes less valuable when the number of training examples increases. This
+finding is consistent with \cite{hinton2015distilling}, in which an expert model
+(which was trained on one-hot labels) is the proprietor of the soft labels.
 
-\begin{figure}[!tb]
+\begin{figure}[t]
 %\begin{figure}[t]
   \centering
   \includegraphics[width=0.5\textwidth]{figs/5_1-train_100.png}
   \caption{
-      Accuracies for a variety of label sharing schemes on C5 class set,
-      trained on 100 images per class. Our soft-labeling schemes consistently
-      outperform one hot and random labeling schemes, especially with a small
-      number of training examples.
+      Performance comparison of all labeling schemes sharing schemes on the C5 class
+      set, trained on 100 images per class. Our soft-labeling schemes
+      consistently outperform one hot and random labeling schemes, especially
+      with a small number of training examples.
   }
   \label{fig:5_1-train_100}
 \end{figure}
 
-\begin{figure}[!tb]
+\begin{figure}[t]
 %\begin{figure}[t]
   \centering
   \includegraphics[width=0.5\textwidth]{figs/5_1-train_1260.png}
   \caption{
-      Comparison of accuracies for the C5 class set using 1260 training images
+      Performance comparison of the C5 class set using 1260 training images
       per class.
   }
   \label{fig:5_1-train_1260}
 \end{figure}
 
-Figures \ref{fig:10_1-train_100} and \ref{fig:10_1-train_1260} demonstrate the
-performance of various labeling schemes on the C10 dataset. Once again we see
-improved performance for the soft labeling schemes over one-hot and random soft
-labeling schemes. The performance boost seems to be a bit more significant here
-than in the C5 class set, perhaps owing to the fact that the increase in the
-number of classes provides soft labels with more opportunities to convey
-information in the form of relationships between classes.
+Figures \ref{fig:10_1-train_100} and \ref{fig:10_1-train_1260} show the
+performance of the labeling schemes on C10. Once again we see improved
+performance for the soft labeling schemes over one-hot and random. The
+performance boost is more significant here than in C5, owing to the fact that
+the increase in the number of classes provides soft labels with more
+opportunities to convey information in the form of relationships between
+classes.
 
-Figure \ref{fig:10_3-train_1260} shows the performance for the C10' dataset.
-Because the classes chosen for this set are not as related semantically, we
-expected the gains in performance to be lower. This is true for Word2Vec, but
-we still see an improvement using the WordNet soft labels over 1-hot labels.
-Further experimentation needs to be done to analyze why this is the case, but
-nevertheless visual and semantic similarities exist among these categories,
-even though they not as strong.
+Figure \ref{fig:10_3-train_1260} shows performance on C10'. Because the classes
+chosen for this set are not as semantically related, we expected the gains in
+performance to be lower. This is true for word2vec, but we still see an
+improvement using the WordNet soft labels over 1-hot labels. Further
+experimentation needs to be done to analyze why this is the case, but
+nevertheless visual and semantic similarities exist among these categories, even
+though they not as strong.
 
 \begin{figure}[!tb]
 %\begin{figure}[t]
   \centering
   \includegraphics[width=0.5\textwidth]{figs/10_1-train_100.png}
   \caption{
-      Comparison of accuracies for the C10 class set using 100 training images
+      Performance comparison of the C10 class set using 100 training images
       per class.
   }
   \label{fig:10_1-train_100}
@@ -179,7 +179,7 @@ even though they not as strong.
   \centering
   \includegraphics[width=0.5\textwidth]{figs/10_1-train_1260.png}
   \caption{
-      Comparison of accuracies for the C10 class set using 1260 training images
+      Performance comparison of the C10 class set using 1260 training images
       per class.
   }
   \label{fig:10_1-train_1260}
@@ -190,7 +190,7 @@ even though they not as strong.
   \centering
   \includegraphics[width=0.5\textwidth]{figs/10_3-train_1260.png}
   \caption{
-      Comparison of accuracies for the C10' class set which contains categories
+      Performance comparison of the C10' class set which contains categories
       that are less semantically similar. These are the results after training
       on 1260 images per class.
   }
@@ -199,8 +199,8 @@ even though they not as strong.
 
 The fact that GIST soft-labels performed well was a nice surprise for us. Even
 though visual similarity between classes is often noisy, it still provides
-enough of a valuable signal to improve learning, at least for the 1260 training
-examples per-class case.
+enough of a signal to improve learning, at least for the 1260 training examples
+per-class case.
 
 % As a proof of concept, we trained two models on a small amount of data from
 % ImageNet. We used 11 ImageNet classes -
@@ -238,7 +238,7 @@ examples per-class case.
 % between the raw Word2Vec features.
 
 
-\begin{figure}[!tb]
+\begin{figure}[t]
 %\begin{figure}[t]
   \centering
   \includegraphics[width=0.5\textwidth]{figs/tsne.png}
@@ -259,68 +259,59 @@ examples per-class case.
         word2vec & 0.2995 & 0.550523\\
         WordNet & 0.36027 & \textbf{0.581415}\\
         Dependency & 0.091352 & 0.394429\\
-        One Hot & \textbf{0.361664} & 0.533101\\
+        1-Hot & \textbf{0.361664} & 0.533101\\
     \end{tabular}
   \caption{
-      Semantic evaluation on only missed examples. Models trained
-      with soft labels generally make more semantically meaningful errors. Our
-      semantic evaluation criterias are similar to \cite{zhao2011large}, with a
-      slight variation.
+      Semantic evaluation on misclassified examples. Models trained with soft
+      labels generally make more semantically meaningful errors.
   }
   \label{tbl:semantic_misses}
 \end{table}
 
 Table \ref{tbl:semantic_misses} illustrates the quality of mistakes each model
-makes. The \emph{word2vec} and \emph{WordNet} models are models which were
-trained soft-labels derived from word2vec and WordNet, which have already been
-discussed. The One Hot model is trained on one-hot vectors. The
-\emph{Dependency} soft labels were derived in an identical way to the
-\emph{word2vec} model, but used word vectors from \cite{levy2014dependency}.
-For the WordNet+GIST soft labels, we computed the average between WordNet and
-GIST affinity matrices.
-
-WN-ZHAO is based on the affinity matrix calculated with equation
-\ref{eq:wordnet_dist}. WN-PATH is an identical affinity matrix, with the
-exception that the scaling procedure of \cite{zhao2011large} has not been
-applied.
-
-To compute scores, we use a similar semantic evaluation metric to
-\cite{zhao2011large}, but with the following deviation: for an affinity matrix
-$A$, a prediction for class $i$ when the correct class is $j$ yields a score of
-$A_{ij}$ for that image. For example, if $i = j$, this corresponds to a correct
-prediction and the model is awarded 1 point (because $A_{ii}$ = 1 for all $i$),
-which is identical to standard accuracy. However, if the model makes an
-incorrect prediction (i.e. $i \neq j$), then the model is awarded a score of
-$A_{ij}$.  Recall that $A_{ij}$ is the affinity for classes $i$ and $j$ and will
-be high when the two classes are similar. Hence the model gets more credit for
-predicting related classes and less credit when predicting an unrelated class.
+makes. The \emph{Dependency} soft labels were derived in an identical way to the
+\emph{word2vec} model, but we used word vectors from \cite{levy2014dependency}.
+For the WordNet+GIST soft labels, we averaged WordNet and GIST affinity
+matrices. WN-ZHAO and WN-PATH are affinity matrices computed with equations
+\ref{eq:wordnet_dist} and \ref{eq:path_dist}, respectively. To compute scores,
+we use a similar semantic evaluation metric to \cite{zhao2011large}, but with
+the following deviation: for an affinity matrix $A$, a prediction for class $i$
+when the correct class is $j$ nets a score of $A_{ij}$ for that image. For
+example, if $i = j$, this corresponds to a correct prediction and the model is
+awarded 1 point (because $A_{ii}$ = 1 for all $i$), which is identical to
+standard accuracy. However, if the model makes an incorrect prediction (i.e. $i
+\neq j$), then the model is awarded a score of $A_{ij}$.  Recall that $A_{ij}$
+is the affinity for classes $i$ and $j$ and will be large when the two classes
+are similar. Hence the model gets more credit for predicting related classes and
+less credit when predicting an unrelated class.
 
 We can see that the model trained on one hot labels performs highest on WN-PATH,
-but both word2vec and WordNet perform higher on WN-ZHAO. We believe that
-performance is higher for WordNet and word2vec on WN-ZHAO because of the diffuse
-property of the WN-PATH affinity matrix. Because WN-PATH is more diffuse, the
-one-hot model does not get penalized as harshly for making bad semantic
-mistakes, whereas it is penalized much more harshly with WN-ZHAO because WN-ZHAO
-is sparser.  We acknowledge that WordNet model's score on WN-ZHAO is likely
-inflated because it was was trained directly on the WN-ZHAO affinity matrix, but
-we are pleased to see that word2vec also outperforms one-hot and requires no
-such require no such disclaimer.
+but both word2vec and WordNet perform higher on WN-ZHAO. We believe performance
+is higher for WordNet and word2vec on WN-ZHAO because of the relative uniformity
+(diffuse) of the WN-PATH affinity matrix. Because WN-PATH is more diffuse, the
+one-hot model does is not penalized as harshly for making bad semantic mistakes,
+whereas it is penalized much more harshly with WN-ZHAO because WN-ZHAO is more
+sparse. We acknowledge that WordNet model's score on WN-ZHAO is likely inflated
+because it was was trained directly on the WN-ZHAO affinity matrix, but we are
+pleased to see that word2vec also outperforms one-hot and requires no such
+disclaimer.
 
-It can be seen that WordNet+GIST and Dependency do quite poorly in Table
-\ref{tab:semantic_misses}. For WordNet+GIST, we placed more of an emphasis on
-using scaling factors which placed WordNet and GIST affinity matrices on the
-same scale, rather than choosing scaling factors which demonstrated strong
-performance in isolation. As for Dependency, qualitatively we noticed poor
-rankings for class similarity (e.g. every class had \emph{yurt} as being most
-similar).
+It can be seen that WordNet+GIST and Dependency do quite poorly. For
+WordNet+GIST, we expected averaging WordNet and GIST affinity matrices to reduce
+the performance loss in cases of disagreement between semantic and visual
+similarity. However, we need to experiment further with taking different linear
+combinations of the two metrics. As for Dependency, qualitatively we noticed
+poor rankings for class similarity (e.g. every class had \emph{yurt} as being
+most similar), which we believe to be responsible for it reprehensible
+performance.
 
 Figure \ref{fig:tsne} shows a t-SNE plot of the predicted softmax probability
 vectors for the C5 class set with word2vec soft labels. We notice that images of
 \emph{yurts} and \emph{obelisks} are clustered close together, indicating that
 these two labels received high probability mass \emph{jointly}. As an aside, we
-would like to point out that t-SNE plots are usually performed on the final
-hidden layer of a CNN and that performing a t-SNE plot on the softmax
-probabilities more accurately reflects the goals of this work.
+would like to point out that t-SNE plots are typically performed on the final
+hidden layer of a CNN, but performing a t-SNE plot on the softmax probabilities
+more accurately reflects the goals of this work.
 
 % \begin{table*}[t]
 %     \centering
