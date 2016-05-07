@@ -155,6 +155,14 @@ than in the C5 class set, perhaps owing to the fact that the increase in the
 number of classes provides soft labels with more opportunities to convey
 information in the form of relationships between classes.
 
+Figure \ref{fig:10_3-train_1260} shows the performance for the C10' dataset.
+Because the classes chosen for this set are not as related semantically, we
+expected the gains in performance to be lower. This is true for Word2Vec, but
+we still see an improvement using the WordNet soft labels over 1-hot labels.
+Further experimentation needs to be done to analyze why this is the case, but
+nevertheless visual and semantic similarities exist among these categories,
+even though they not as strong.
+
 \begin{figure}[!tb]
 %\begin{figure}[t]
   \centering
@@ -175,6 +183,18 @@ information in the form of relationships between classes.
       per class.
   }
   \label{fig:10_1-train_1260}
+\end{figure}
+
+\begin{figure}[!tb]
+%\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.5\textwidth]{figs/10_3-train_1260.png}
+  \caption{
+      Comparison of accuracies for the C10' class set which contains categories
+      that are less semantically similar. These are the results after training
+      on 1260 images per class.
+  }
+  \label{fig:10_3-train_1260}
 \end{figure}
 
 The fact that GIST soft-labels performed well was a nice surprise for us. Even

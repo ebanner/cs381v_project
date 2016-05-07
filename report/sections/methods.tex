@@ -175,6 +175,16 @@ Since GIST is a global descriptor, we expect it to capture more of the
 background contextual information rather than similarities between the objects
 themselves.
 
+
+\subsection{Random Soft Labels}
+
+As a ``sanity check'' that our method is actually working, we also train the
+CNN on a randomly-generated soft label distribution. For the affinity matrix
+$A$, each non-diagonal entry $A_{ij}, i \neq j$ is a randomly-generated value
+between 0 and 0.25. The diagonal (identity) values are fixed at 1 as in the
+other soft label schemes. We generate several random affinity matrices in this
+manner and take the average score for each data set.
+
 %To better represent the categories directly, we can also experiment with
 %visual word clusters mined from images of different object categories.
 %We expect that clustering SIFT descriptors \cite{lowe1999object} should work
